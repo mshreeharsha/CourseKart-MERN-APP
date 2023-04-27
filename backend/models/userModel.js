@@ -65,13 +65,9 @@ userSchema.statics.register = async function(name,email,password,phone,address){
 
 userSchema.statics.login = async function(email,password){
 
-    if(!email||!password){
-        throw Error('All Fields Must be filled')
-    }
-
     const user=await this.findOne({email})
     if(!user){
-        throw Error('Incorrect Email')
+        throw Error('Incorrect Email, User is Not Registered')
     }
 
     const match = await bcrypt.compare(password,user.password)
