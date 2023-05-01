@@ -2,7 +2,8 @@ const express=require('express')
 const {registerController,loginController} =require('../controllers/userController')
 const router=express.Router()
 
-//Routes
+//Authorization
+const {requireSignIn,isAdmin}=require('../middleware/requireAuth')
 
 //register Route
 router.post('/register',registerController)
