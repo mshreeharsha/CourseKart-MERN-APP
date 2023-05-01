@@ -13,19 +13,19 @@ const registerController=async(req,res)=>{
     const {name,email,password,phone,address}=req.body
     let emptyField=[]
     if(!name){
-        emptyField.push(name)
+        emptyField.push('name')
     }
     if(!email){
-        emptyField.push(email)
+        emptyField.push('email')
     }
     if(!password){
-        emptyField.push(password)
+        emptyField.push('password')
     }
     if(!phone){
-        emptyField.push(phone)
+        emptyField.push('phone')
     }
     if(!address){
-        emptyField.push(address)
+        emptyField.push('address')
     }
     
     if(emptyField.length>0){
