@@ -1,9 +1,12 @@
 import React from 'react'
 import Layout from '../components/Layout/Layout'
+import '../styles/Homepage.css'
+
 const HomePage = () => {
   return (
     <Layout>
-        HomePage
+      <div className='homepage'> HomePage</div>
+        
     </Layout>
   )
 }
