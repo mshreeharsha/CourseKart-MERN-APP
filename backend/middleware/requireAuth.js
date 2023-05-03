@@ -6,6 +6,7 @@ const requireSignIn = async(req,res,next)=>{
     try {
         const decode=jwt.verify(req.headers.authorization,process.env.SECRET)
         req.user=decode
+        console.log(decode)
         next()
     } catch (error) {
         console.log(error)
@@ -20,7 +21,7 @@ const requireSignIn = async(req,res,next)=>{
 const isAdmin = async(req,res,next)=>{
     try {
         const id=req.user._id
-        const user=await userModel.findbyId({id})
+        const user=await userModel.findById(id)
         if(user.role!==1){
             return res.status(400).send({
                 success:false,
