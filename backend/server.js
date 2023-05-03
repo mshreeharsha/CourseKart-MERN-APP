@@ -5,6 +5,7 @@ require('dotenv').config()
 const express=require('express')
 const app=express()
 const userRoute = require('./routes/userRoute')
+const categoryRoute = require('./routes/categoryRoutes')
 
 //Morgan
 const morgan = require('morgan')
@@ -16,6 +17,7 @@ app.use(morgan('dev'))
 
 //routes
 app.use('/api/users',userRoute)
+app.use('/api/category',categoryRoute)
 
 //Connect to Database
 connectDB()
