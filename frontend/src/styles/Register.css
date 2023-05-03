@@ -1,0 +1,60 @@
+/* ===================================
+========= register page  */
+/* ===================================
+========= register page  */
+.form-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 70vh;
+    flex-direction: column;
+    background-color: #b7f2e8;
+    background-image: linear-gradient(0deg, #c3e5d0 0%, #b5fffc 100%);
+}
+
+.form-container form {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.form-container form .title {
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-family: "Playfair Display", serif;
+    font-size: 28px;
+    color: #333;
+}
+
+.form-container form input {
+    border: none;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0;
+    margin-bottom: 20px;
+    padding: 10px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-container form button {
+    border: none;
+    border-radius: 5px;
+    background-color: #5a5a5a;
+    color: #fff;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.form-container form button:hover {
+    background-color: #333;
+}
+
