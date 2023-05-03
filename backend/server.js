@@ -6,6 +6,7 @@ const express=require('express')
 const app=express()
 const userRoute = require('./routes/userRoute')
 const categoryRoute = require('./routes/categoryRoutes')
+const courseRoute = require('./routes/courseRoute')
 
 //Morgan
 const morgan = require('morgan')
@@ -18,6 +19,7 @@ app.use(morgan('dev'))
 //routes
 app.use('/api/users',userRoute)
 app.use('/api/category',categoryRoute)
+app.use('/api/course',courseRoute)
 
 //Connect to Database
 connectDB()
