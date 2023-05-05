@@ -1,9 +1,12 @@
 import React from 'react'
 import Layout from '../components/Layout/Layout'
+import { useAuthContext } from '../context/auth'
 const HomePage = () => {
+  const [auth,setAuth]=useAuthContext()
   return (
     <Layout>
-        HomePage
+        <div className="homepage">Home Page</div>
+        <pre>{JSON.stringify(auth,null,4)}</pre>
     </Layout>
   )
 }
