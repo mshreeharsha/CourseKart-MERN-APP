@@ -24,10 +24,6 @@ app.use('/api/course',courseRoute)
 //Connect to Database
 connectDB()
 
-app.get('/',(req,res)=>{
-    res.send({mssg:'Hello there'})
-})
-
 //Listening to Requests
 app.listen(process.env.PORT,()=>{
     console.log(`Server Running at Port ${process.env.PORT}`)
