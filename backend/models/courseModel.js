@@ -27,6 +27,10 @@ const courseModel=new Schema({
         data:Buffer,
         contentType:String
     },
+    instructor:{
+        type:mongoose.ObjectId,
+        ref:'Instructor'
+    },
     accessible:{
         type:Boolean
     }
