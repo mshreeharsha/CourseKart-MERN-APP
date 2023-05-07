@@ -117,7 +117,7 @@ const getSingleCourseController = async(req,res)=>{
         console.log(error.message)
         res.status(400).send({
             success:false,
-            message:'Error in Fetching Single Product',
+            message:'Error in Fetching Single Course',
             error:error.message
         })
     }
