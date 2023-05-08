@@ -1,5 +1,7 @@
 import React from 'react'
 import Layout from '../components/Layout/Layout'
+import '../styles/Homepage.css'
+
 import { useAuthContext } from '../context/auth'
 const HomePage = () => {
   const [auth,setAuth]=useAuthContext()
