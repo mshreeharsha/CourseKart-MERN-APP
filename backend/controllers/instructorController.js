@@ -1,12 +1,18 @@
 const instructorModel = require('../models/instructor')
+const slugify=require('slugify')
 
 const createInstructorController = async(req,res)=>{
     try {
-        const {instructorName,courses}=req.body
+        const {instructorName,slug,courses,instructorDetails}=req.body
         //Validation
         if(!instructorName){
             return res.status(500).send({
                 message:'Instructor Name is Required'
+            })
+        }
+        if(!instructorDetails){
+            return res.status(500).send({
+                message:'Details is Required'
             })
         }
         
@@ -19,7 +25,7 @@ const createInstructorController = async(req,res)=>{
             })
         }
 
-        const instructor=await instructorModel.create({instructorName,courses})
+        const instructor=await instructorModel.create({instructorName,courses,instructorDetails,slug:slugify(instructorName)})
         res.status(201).send({
             success:true,
             message:'New Instructor Created',
@@ -35,11 +41,38 @@ const createInstructorController = async(req,res)=>{
         })
     }
 }
+
+//Updating Instructor
 const updateInstructorController = async(req,res)=>{
+    try {
+        const {id} = req.params
+        const {instructorName,slug,courses,instructorDetails}=req.body
+        //Validation
+        if(!instructorName){
+            return res.status(500).send({
+                message:'Instructor Name is Required'
+            })
+        }
+        if(!instructorDetails){
+            return res.status(500).send({
+                message:'Details is Required'
+            })
+        }
 
-}
-const getInstructorController = async(req,res)=>{
+        const instructor=await instructorModel.findByIdAndUpdate(id,{instructorName,courses,instructorDetails,slug:slugify(instructorName)},{new:true})
 
+        res.status(200).send({
+            success:true,
+            message:'Instructor Updated Successfully',
+            instructor
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({
+            success:false,
+            message:'Error in Updating the Instructor'
+        })
+    }
 }
 
 //Getting a single Instructor
@@ -62,9 +95,32 @@ const getSingleInstructorController = async(req,res)=>{
     }
 }
 const deleteInstructorController = async(req,res)=>{
+    try {
+        const {id}=req.params
+        const instructor=await instructorModel.findById(id)
+        const courses=instructor.courses
+        if(courses.length>0){
+            return res.status(400).send({
+                success:false,
+                message:"Can't delete Instructor"
+            })
+        }
 
+        await instructorModel.findByIdAndDelete(id)
+        res.status(400).send({
+            success:true,
+            message:'Deleted Instructor Successfully'
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({
+            success:false,
+            message:'Error in Deleting Instructor',
+            error:error.message
+        })
+    }
 }
 
-module.exports={createInstructorController,updateInstructorController,getInstructorController,
+module.exports={createInstructorController,updateInstructorController,
     getSingleInstructorController,
     deleteInstructorController}

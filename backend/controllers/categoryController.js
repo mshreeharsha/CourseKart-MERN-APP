@@ -1,5 +1,6 @@
 const categoryModel = require("../models/categoryModel")
-
+const instructorModel = require("../models/instructor")
+const courseModel=require("../models/courseModel")
 const slugify=require('slugify')
 
 //Create Category
@@ -104,6 +105,16 @@ const getSingleCategoryController = async(req,res)=>{
 const deleteCategoryController = async(req,res)=>{
     try {
         const {id}=req.params
+        const courses = await courseModel.find({category:id})
+        for(let i=0;i<courses.length;i++){
+            const instructor=courses[i].instructor
+            console.log(instructor)
+
+            await instructorModel.findOneAndUpdate({_id:instructor},
+                { $pull: { courses:courses[i]._id} },
+                { new: true })
+            await courseModel.findByIdAndDelete(courses[i]._id)
+        }
         await categoryModel.findByIdAndDelete(id)
         res.status(200).send({
             success:true,
