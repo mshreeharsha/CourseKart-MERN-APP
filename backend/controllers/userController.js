@@ -2,6 +2,7 @@
 const User=require('../models/userModel')
 const jwt=require('jsonwebtoken')
 
+
 //Function to Generate Json Web Token
 const createToken=(_id)=>{
     return jwt.sign({_id},process.env.SECRET,{expiresIn: '3d'})
@@ -9,7 +10,6 @@ const createToken=(_id)=>{
 
 //Register Controller
 const registerController=async(req,res)=>{
-
     const {name,email,password,phone,address}=req.body
     let emptyField=[]
     if(!name){
@@ -29,15 +29,19 @@ const registerController=async(req,res)=>{
     }
     
     if(emptyField.length>0){
-        return res.status(400).json({error:'Please Fill All the Fields',emptyField})
+        return res.status(400).send({
+            success:false,
+            message:'All Fields Must be Filled'
+        })
     }
 
     try {
-        const user= await User.register(name,email,password,phone,address)
+        const user=await User.register(name,email,password,phone,address)
         const token=createToken(User._id)
+        console.log(user)
         res.status(200).send({
-            sucess:true,
-            message:'User Registered Sucessfully',
+            success:true,
+            message:'User Registered Successfully',
             user:{
                 name: user.name,
                 email: user.email,
@@ -47,7 +51,11 @@ const registerController=async(req,res)=>{
         })
         
     } catch (error) {
-        res.status(400).json({error:error.message})
+        res.status(400).send({
+            success:false,
+            message:error.message,
+            error
+        })
     }
 }
 
@@ -56,15 +64,18 @@ const registerController=async(req,res)=>{
 const loginController = async(req,res)=>{
     const {email,password}=req.body
     if(!email || !password){
-        return res.status(400).json({error:'Please Fill All the Fields'})
+        return res.status(400).send({
+            success:false,
+            message:'All Fields have to be Filled'
+        })
     }
 
     try {
-        const user= await User.login(email,password)
+        const user=await User.login(email,password)
         const token=createToken(user._id)
         res.status(200).send({
-            sucess:true,
-            message:'User Logged in Sucessfully',
+            success:true,
+            message:'User Logged in Successfully',
             user:{
                 _id: user._id,
                 name: user.name,
@@ -76,7 +87,11 @@ const loginController = async(req,res)=>{
             token
         })
     } catch (error) {
-        res.status(400).json({error:error.message})
+        res.status(400).send({
+            success:false,
+            message:error.message,
+            error
+        })
     }
 }
 

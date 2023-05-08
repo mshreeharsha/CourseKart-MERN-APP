@@ -1,5 +1,4 @@
 
-import './App.css';
 import {Routes,Route} from 'react-router-dom'
 import HomePage from './pages/HomePage';
 import About from './pages/About';
@@ -11,10 +10,13 @@ import Login from './pages/Auth/Login.js';
 import Dashboard from './pages/user/Dashboard';
 import PrivateRoute from './components/routes/Private';
 
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   return (
-    <>
+    
+    <div >
+      <Toaster />
     <Routes>
       <Route path='/' element = {<HomePage/>}/>
       <Route path='/dashboard' element = {<PrivateRoute/>}>
@@ -27,7 +29,7 @@ function App() {
       <Route path='/policy' element = {<Policy/>}/>
       <Route path='/*' element = {<Pagenotfound/>}/>
     </Routes>
-    </>
+    </div>
   );
 }
 

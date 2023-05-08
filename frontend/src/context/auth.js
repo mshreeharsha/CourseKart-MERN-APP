@@ -11,8 +11,8 @@ const AuthContextProvider = ({children})=>{
         token:"",
     })
 
-    //default axios 
-    axios.defaults.headers.common['Authorization'] = auth?.token
+    // default axios
+    axios.defaults.headers.common["Authorization"] = auth?.token
 
     useEffect(()=>{
         const data=localStorage.getItem('auth')
@@ -26,7 +26,6 @@ const AuthContextProvider = ({children})=>{
                 }
             )
         }
-        // eslint-disable-next-line
     },[])
 
     return(

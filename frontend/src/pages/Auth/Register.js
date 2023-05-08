@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Layout from "./../../components/Layout/Layout";
+import {toast} from 'react-hot-toast'
 import '../../styles/Register.css'
 import { useNavigate } from "react-router-dom";
 
@@ -18,19 +19,20 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('/api/v1/auth/register',
+      const res = await axios.post('/api/users/register',
       {name,email,password,phone,address})
       if(res.data.success)
       {
-        alert('Registered Succesfully')
-        navigate('./login')
+        toast.success(res.data.message,{
+          duration: 5000
+        })
+        navigate('/login')
       }
       else{
-        alert(res.data.message)
+        toast.error(res.data.message)
       }
     } catch (error) {
-      console.log(error)
-      alert('Something went wrong')
+      toast.error(error.response.data.message)
     }
   };
 
@@ -45,7 +47,7 @@ const Register = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="form-control"
-              id="exampleInputEmail1"
+              id="exampleName"
               placeholder="Enter Your Name"
               required
               autoFocus
@@ -57,7 +59,7 @@ const Register = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="form-control"
-              id="exampleInputEmail1"
+              id="exampleInputEmail"
               placeholder="Enter Your Email "
               required
             />
@@ -79,7 +81,7 @@ const Register = () => {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               className="form-control"
-              id="exampleInputEmail1"
+              id="exampleInputPhoneNo"
               placeholder="Enter Your Phone"
               required
             />
@@ -90,7 +92,7 @@ const Register = () => {
               value={address}
               onChange={(e) => setAddress(e.target.value)}
               className="form-control"
-              id="exampleInputEmail1"
+              id="exampleInputAddress"
               placeholder="Enter Your Address"
               required
             />
