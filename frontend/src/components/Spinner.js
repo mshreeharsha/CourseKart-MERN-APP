@@ -4,12 +4,16 @@ import { useNavigate,useLocation } from 'react-router-dom';
 const Spinner = () => {
   const [count , setCount ] = useState(5)
   const navigate = useNavigate()
+
+  //To Track History, sending back the use from where he was navigated
   const location = useLocation()
 
   useEffect(()=>{
       const interval = setInterval(()=>{
         setCount((prevValue) => --prevValue)
       },1000)
+
+      //Get Navigated when counter Becomes to 0
       count === 0 && navigate("/login",{ state: location.pathname });
 
       return () => clearInterval(interval)

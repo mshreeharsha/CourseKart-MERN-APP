@@ -1,6 +1,9 @@
 import { useState,useEffect } from "react";
 import { useAuthContext } from "../../context/auth";
+
+//Outlet will Help to create Sub routes within Routes
 import { Outlet } from "react-router-dom";
+
 import axios from "axios";
 import Spinner from "../Spinner";
 
