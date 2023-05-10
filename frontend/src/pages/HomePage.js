@@ -4,7 +4,7 @@ import '../styles/Homepage.css'
 
 import { useAuthContext } from '../context/auth'
 const HomePage = () => {
-  const [auth,setAuth]=useAuthContext()
+  const [auth]=useAuthContext()
   return (
     <Layout>
         <div className="homepage">Home Page</div>

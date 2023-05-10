@@ -33,6 +33,8 @@ const Login = () => {
             token: res.data.token,
           });
         localStorage.setItem("auth", JSON.stringify(res.data));
+
+        //Navigate back to the page from where the user was redirected to login
         navigate(location.state || "/");
       } else {
         toast.error(res.data.message);
