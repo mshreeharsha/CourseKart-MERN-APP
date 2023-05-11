@@ -17,6 +17,7 @@ const CreateInstructor = () => {
   const [selected,setSelected]=useState(null)
   const [updatedName,setUpdatedName]=useState('')
   const [updatedDetails,setUpdatedDetails]=useState('')
+  const [photo,setPhoto]=useState("")
 
 
   //Handle Form SUbmit
@@ -25,14 +26,19 @@ const CreateInstructor = () => {
     e.preventDefault()
 
     try {
-      const {data}= await axios.post('/api/instructor/create-instructor',{instructorName,instructorDetails})
+      const instructorData=new FormData()
+      instructorData.append("instructorName",instructorName)
+      instructorData.append("instructorDetails",instructorDetails)
+      instructorData.append("photo",photo)
+      const {data}= await axios.post('/api/instructor/create-instructor',instructorData)
 
       
       if(data?.success){
         toast.success(`${instructorName} Instructor Added`)
-        getAllInstructor()
         setName('')
         setDetails('')
+        setPhoto('')
+        getAllInstructor()
       }
       else{
         toast.error(data.message)
@@ -116,7 +122,8 @@ const CreateInstructor = () => {
                 <div className="col-md-8">
                 <h1>Manage Instructor</h1>
                   <div className="p-3 w-50">
-                    <InstructorForm handleSubmit={handleSubmit} name={instructorName} details={instructorDetails} setName={setName} setDetails={setDetails}/>
+                    <InstructorForm handleSubmit={handleSubmit} name={instructorName} details={instructorDetails} setName={setName} setDetails={setDetails}
+                    photo={photo} setPhoto={setPhoto}/>
                   </div>
                 </div>
                 <div className="col-md-9 mx-auto">

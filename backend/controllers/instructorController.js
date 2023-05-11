@@ -1,10 +1,13 @@
 const instructorModel = require('../models/instructor')
 const slugify=require('slugify')
+//File System
+const fs = require('fs')
 
 const createInstructorController = async(req,res)=>{
     try {
-        const {instructorName,slug,instructorDetails}=req.body
-        console.log(req.body.instructorName)
+        console.log(req.fields)
+        const {instructorName,slug,instructorDetails}=req.fields
+        const {photo}=req.files
         //Validation
         if(!instructorName){
             return res.status(500).send({
@@ -16,7 +19,11 @@ const createInstructorController = async(req,res)=>{
                 message:'Details is Required'
             })
         }
-        
+        if(photo && photo.size>100000){
+            return res.status(500).send({
+                message:'Photo is Required and should be less than 1MB'
+            })
+        }
         const existing=await instructorModel.findOne({instructorName})
 
         if(existing){
@@ -26,7 +33,14 @@ const createInstructorController = async(req,res)=>{
             })
         }
 
-        const instructor=await instructorModel.create({instructorName,instructorDetails,slug:slugify(instructorName),courses:[]})
+        const instructor=new instructorModel({instructorName,instructorDetails,slug:slugify(instructorName),courses:[]})
+
+        if(photo){
+            instructor.photo.data = fs.readFileSync(photo.path)
+
+            instructor.photo.contentType=photo.type
+        }
+        await instructor.save()
         res.status(201).send({
             success:true,
             message:'New Instructor Created',
@@ -47,7 +61,8 @@ const createInstructorController = async(req,res)=>{
 const updateInstructorController = async(req,res)=>{
     try {
         const {id} = req.params
-        const {instructorName,slug,instructorDetails}=req.body
+        const {instructorName,slug,instructorDetails}=req.fields
+        const {photo}=req.files
         //Validation
         if(!instructorName){
             return res.status(500).send({
@@ -60,7 +75,19 @@ const updateInstructorController = async(req,res)=>{
             })
         }
 
+        if(photo && photo.size>100000){
+            return res.status(500).send({
+                message:'Photo is Required and should be less than 1MB'
+            })
+        }
+
         const instructor=await instructorModel.findByIdAndUpdate(id,{instructorName,instructorDetails,slug:slugify(instructorName)},{new:true})
+
+        if(photo){
+            instructor.photo.data = fs.readFileSync(photo.path)
+
+            instructor.photo.contentType=photo.type
+        }
 
         res.status(200).send({
             success:true,
@@ -79,7 +106,7 @@ const updateInstructorController = async(req,res)=>{
 //Getting All Instructors
 const getAllInstructorController = async(req,res)=>{
     try {
-        const instructors= await instructorModel.find({}).sort({createdAt:-1})
+        const instructors= await instructorModel.find({}).sort({createdAt:-1}).select("-photo")
         res.status(200).send({
             success:true,
             message:'All Instructor List',
@@ -99,7 +126,7 @@ const getAllInstructorController = async(req,res)=>{
 //Getting a single Instructor
 const getSingleInstructorController = async(req,res)=>{
     try {
-        const instructor= await instructorModel.findOne({slug:req.params.slug})
+        const instructor= await instructorModel.findOne({slug:req.params.slug}).select("-photo")
         res.status(200).send({
             success:true,
             message:'Fetched A Single Instructor',
@@ -114,9 +141,29 @@ const getSingleInstructorController = async(req,res)=>{
         })
     }
 }
+
+//Get Photo
+const getPhotoController = async(req,res)=>{
+    try {
+        const instructor = await instructorModel.findById(req.params.pid).select("photo")
+        if(instructor.photo.data){
+            res.set('Content-type',instructor.photo.contentType);
+            return res.status(200).send(instructor.photo.data);
+        }
+    } catch (error) {
+        console.log(error.message);
+        res.status(400).send({
+            success:false,
+            message:'Error in Fetching Photo',
+            error:error.message
+        });
+    }
+}
+
+
 const deleteInstructorController = async(req,res)=>{
     try {
-        const instructor=await instructorModel.findById(req.params.id)
+        const instructor=await instructorModel.findById(req.params.id).select("-photo")
         const courses=instructor.courses
         if(courses.length>0){
             return res.status(400).send({
@@ -125,7 +172,7 @@ const deleteInstructorController = async(req,res)=>{
             })
         }
 
-        await instructorModel.findByIdAndDelete(req.params.id)
+        await instructorModel.findByIdAndDelete(req.params.id).select("-photo")
         res.status(200).send({
             success:true,
             message:'Deleted Instructor Successfully'
@@ -143,4 +190,5 @@ const deleteInstructorController = async(req,res)=>{
 module.exports={createInstructorController,updateInstructorController,
     getSingleInstructorController,
     deleteInstructorController,
-    getAllInstructorController}
+    getAllInstructorController,
+    getPhotoController}
