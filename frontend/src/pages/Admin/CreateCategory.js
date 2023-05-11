@@ -33,7 +33,7 @@ const CreateCategory = () => {
     catch(error)
     {
       console.log(error)
-      toast.error('Something went wrong in Input Form')
+      toast.error(error.response.data.message)
     }
   }
 

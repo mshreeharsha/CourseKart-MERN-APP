@@ -6,16 +6,20 @@ const router=express.Router()
 const {createInstructorController,
     updateInstructorController,
     getSingleInstructorController,
-    deleteInstructorController}=require('../controllers/instructorController')
+    deleteInstructorController,
+    getAllInstructorController}=require('../controllers/instructorController')
 
 //create Instructor Route
 router.post('/create-instructor',requireSignIn,isAdmin,createInstructorController)
 
 //update Instructor Route
-router.put('/update-instructor/:id',requireSignIn,isAdmin,updateInstructorController)
+router.patch('/update-instructor/:id',requireSignIn,isAdmin,updateInstructorController)
 
 //get Single Instructor
-router.get('/single-instructor/:id',getSingleInstructorController)
+router.get('/single-instructor/:slug',getSingleInstructorController)
+
+//get all Instructor
+router.get('/all-instructors',getAllInstructorController)
 
 //delete Instructor
 router.delete('/delete-instructor/:id',requireSignIn,isAdmin,deleteInstructorController)

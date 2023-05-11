@@ -3,7 +3,8 @@ const slugify=require('slugify')
 
 const createInstructorController = async(req,res)=>{
     try {
-        const {instructorName,slug,courses,instructorDetails}=req.body
+        const {instructorName,slug,instructorDetails}=req.body
+        console.log(req.body.instructorName)
         //Validation
         if(!instructorName){
             return res.status(500).send({
@@ -25,7 +26,7 @@ const createInstructorController = async(req,res)=>{
             })
         }
 
-        const instructor=await instructorModel.create({instructorName,courses,instructorDetails,slug:slugify(instructorName)})
+        const instructor=await instructorModel.create({instructorName,instructorDetails,slug:slugify(instructorName),courses:[]})
         res.status(201).send({
             success:true,
             message:'New Instructor Created',
@@ -46,7 +47,7 @@ const createInstructorController = async(req,res)=>{
 const updateInstructorController = async(req,res)=>{
     try {
         const {id} = req.params
-        const {instructorName,slug,courses,instructorDetails}=req.body
+        const {instructorName,slug,instructorDetails}=req.body
         //Validation
         if(!instructorName){
             return res.status(500).send({
@@ -59,7 +60,7 @@ const updateInstructorController = async(req,res)=>{
             })
         }
 
-        const instructor=await instructorModel.findByIdAndUpdate(id,{instructorName,courses,instructorDetails,slug:slugify(instructorName)},{new:true})
+        const instructor=await instructorModel.findByIdAndUpdate(id,{instructorName,instructorDetails,slug:slugify(instructorName)},{new:true})
 
         res.status(200).send({
             success:true,
@@ -75,11 +76,30 @@ const updateInstructorController = async(req,res)=>{
     }
 }
 
+//Getting All Instructors
+const getAllInstructorController = async(req,res)=>{
+    try {
+        const instructors= await instructorModel.find({}).sort({createdAt:-1})
+        res.status(200).send({
+            success:true,
+            message:'All Instructor List',
+            instructors
+        })
+    } catch (error) {
+        console.log(error.message)
+        res.status(400).send({
+            success:false,
+            message:'Error in Fetching All Instructors',
+            error:error.message
+        })
+    }
+}
+
+
 //Getting a single Instructor
 const getSingleInstructorController = async(req,res)=>{
-    const {id}=req.params
     try {
-        const instructor= await instructorModel.findOne({_id:id})
+        const instructor= await instructorModel.findOne({slug:req.params.slug})
         res.status(200).send({
             success:true,
             message:'Fetched A Single Instructor',
@@ -96,8 +116,7 @@ const getSingleInstructorController = async(req,res)=>{
 }
 const deleteInstructorController = async(req,res)=>{
     try {
-        const {id}=req.params
-        const instructor=await instructorModel.findById(id)
+        const instructor=await instructorModel.findById(req.params.id)
         const courses=instructor.courses
         if(courses.length>0){
             return res.status(400).send({
@@ -106,8 +125,8 @@ const deleteInstructorController = async(req,res)=>{
             })
         }
 
-        await instructorModel.findByIdAndDelete(id)
-        res.status(400).send({
+        await instructorModel.findByIdAndDelete(req.params.id)
+        res.status(200).send({
             success:true,
             message:'Deleted Instructor Successfully'
         })
@@ -123,4 +142,5 @@ const deleteInstructorController = async(req,res)=>{
 
 module.exports={createInstructorController,updateInstructorController,
     getSingleInstructorController,
-    deleteInstructorController}
+    deleteInstructorController,
+    getAllInstructorController}

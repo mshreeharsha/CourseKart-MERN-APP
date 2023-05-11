@@ -28,8 +28,8 @@ const courseModel=new Schema({
         contentType:String
     },
     instructor:{
-        type:mongoose.ObjectId,
-        ref:'Instructor'
+        type:String,
+        required:true
     },
     accessible:{
         type:Boolean
