@@ -110,8 +110,8 @@ const deleteCategoryController = async(req,res)=>{
             const instructor=courses[i].instructor
             console.log(instructor)
 
-            await instructorModel.findOneAndUpdate({_id:instructor},
-                { $pull: { courses:courses[i]._id} },
+            await instructorModel.findOneAndUpdate({slug:instructor},
+                { $pull: { courses:courses[i].slug} },
                 { new: true })
             await courseModel.findByIdAndDelete(courses[i]._id)
         }

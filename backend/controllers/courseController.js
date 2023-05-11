@@ -60,8 +60,8 @@ const createCourseController = async(req,res)=>{
         }
 
         await course.save()
-        await instructorModel.findOneAndUpdate({_id:instructor},
-            { $push: { courses: course._id } },
+        await instructorModel.findOneAndUpdate({slug:instructor},
+            { $push: { courses: course.slug } },
             { new: true })
         res.status(201).send({
             success:true,
@@ -149,8 +149,8 @@ const deleteCourseController =async(req,res)=>{
         console.log(pid)
         const course=await courseModel.findByIdAndDelete(pid).select("-photo")
         const instructor=course.instructor
-        await instructorModel.findOneAndUpdate({_id:instructor},
-            { $pull: { courses: pid } },
+        await instructorModel.findOneAndUpdate({slug:instructor},
+            { $pull: { courses: course.slug } },
             { new: true })
         res.status(200).send({
             success:true,
@@ -176,8 +176,8 @@ const updateCourseController = async(req,res)=>{
         console.log(oldCourse)
         const oldInstructor=oldCourse.instructor
         console.log(oldInstructor)
-        await instructorModel.findOneAndUpdate({_id:oldInstructor},
-            { $pull: { courses: cid } },
+        await instructorModel.findOneAndUpdate({slug:oldInstructor},
+            { $pull: { courses: oldCourse.slug } },
             { new: true })
 
 
@@ -224,8 +224,8 @@ const updateCourseController = async(req,res)=>{
         }
 
         await course.save()
-        await instructorModel.findOneAndUpdate({_id:instructor},
-            { $push: { courses: cid } },
+        await instructorModel.findOneAndUpdate({instructorName:instructor},
+            { $push: { courses: course.name } },
             { new: true })
         res.status(201).send({
             success:true,
