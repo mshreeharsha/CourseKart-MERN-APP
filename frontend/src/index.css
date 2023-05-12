@@ -111,3 +111,8 @@
   font-size : 500%;
   font-family : monospace;
 }
+
+.course-link{
+  text-decoration: none !important;
+  color:black;
+}

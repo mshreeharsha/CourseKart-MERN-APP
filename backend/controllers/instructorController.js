@@ -106,7 +106,7 @@ const updateInstructorController = async(req,res)=>{
 //Getting All Instructors
 const getAllInstructorController = async(req,res)=>{
     try {
-        const instructors= await instructorModel.find({}).sort({createdAt:-1}).select("-photo")
+        const instructors= await instructorModel.find({}).sort({createdAt:-1}).select("-photo").populate("courses")
         res.status(200).send({
             success:true,
             message:'All Instructor List',
@@ -126,7 +126,7 @@ const getAllInstructorController = async(req,res)=>{
 //Getting a single Instructor
 const getSingleInstructorController = async(req,res)=>{
     try {
-        const instructor= await instructorModel.findOne({slug:req.params.slug}).select("-photo")
+        const instructor= await instructorModel.findOne({slug:req.params.slug}).select("-photo").populate("courses")
         res.status(200).send({
             success:true,
             message:'Fetched A Single Instructor',

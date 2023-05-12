@@ -142,8 +142,8 @@ const CreateInstructor = () => {
                         <tr key={inst._id}>
                           <td>{inst.instructorName}</td>
                           <td>{inst.instructorDetails}</td>
-                          <td><ul>{inst.courses.length> 0 ?(inst.courses.map((cname)=>(
-                            <li key={cname}>{cname}</li>
+                          <td><ul>{inst.courses.length> 0 ?(inst.courses.map((course)=>(
+                            <li key={course._id}>{course.name}</li>
                           ))):<li key={"Nocourse"}>{"No Course Alloted"}</li>}</ul></td>
                           <td>
                           <button className='btn btn-primary ms-2'

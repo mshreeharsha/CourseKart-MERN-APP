@@ -12,7 +12,8 @@ const instructorSchema=new Schema({
         lowercase:true
     },
     courses:[{
-        type: String
+        type:mongoose.ObjectId,
+        ref:'Course'
       }],
     instructorDetails:{
         type:String,
