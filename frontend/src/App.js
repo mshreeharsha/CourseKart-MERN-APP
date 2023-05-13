@@ -19,11 +19,13 @@ import CreateInstructor from './pages/Admin/CreateInstructor';
 import Users from './pages/Admin/Users';
 import Courses from './pages/Admin/Courses';
 import UpdateCourse from './pages/Admin/UpdateCourse';
+import UpdatedInstructor from './pages/Admin/UpdatedInstructor';
 
 import PrivateRoute from './components/routes/Private';
 import AdminRoute from './components/routes/AdminRoute';
 
 import { Toaster } from 'react-hot-toast';
+
 
 
 
@@ -45,6 +47,7 @@ function App() {
         <Route path='admin/create-category' element={<CreateCategory/>}/>
         <Route path='admin/create-course' element={<CreateCourse/>}/>
         <Route path='admin/courses/:slug' element={<UpdateCourse/>}/>
+        <Route path='admin/instructor/:slug' element={<UpdatedInstructor/>}/>
         <Route path='admin/create-instructor' element={<CreateInstructor/>}/>
         <Route path='admin/users' element={<Users/>}/>
         <Route path='admin/courses' element={<Courses/>}/>
