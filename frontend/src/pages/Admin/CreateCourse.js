@@ -4,7 +4,6 @@ import Layout from '../../components/Layout/Layout'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import {Select} from 'antd'
-import slugify from 'slugify';
 import { useNavigate } from 'react-router-dom'
 const {Option}=Select
 
@@ -18,6 +17,7 @@ const CreateCourse = () => {
   const [price,setPrice]=useState("")
   const [category,setCategory]=useState("")
   const [instructor,setInstructor]=useState("")
+  const [duration,setDuration]=useState("")
   const [accessible,setAccessible]=useState("")
   const navigate=useNavigate()
 
@@ -72,6 +72,7 @@ const CreateCourse = () => {
       courseData.append("category",category)
       courseData.append("photo",photo)
       courseData.append("instructor",instructor)
+      courseData.append("duration",duration)
       courseData.append("accessible",accessible)
       const {data}=await axios.post('/api/course/create-course',courseData)
 
@@ -83,6 +84,7 @@ const CreateCourse = () => {
         setInstructor("")
         setAccessible("")
         setPrice("")
+        setDuration("")
         navigate('/dashboard/admin/courses')
       }
       else{
@@ -152,14 +154,19 @@ const CreateCourse = () => {
                     <Select bordered={false} placeholder="Select a Instructor" 
                   size="large" showSearch className='form-select mb-3 border-dark'
                   onChange={(value)=>{
-                    setInstructor(slugify(value))
+                    setInstructor(value)
                   }}>
                      {instructors?.map((c)=>(
-                      <Option key={c._id} value={c.instructorName}>
+                      <Option key={c._id} value={c._id}>
                         {c.instructorName}
                       </Option>
                      ))}
                   </Select>
+                  </div>
+                  <div className="mb-3">
+                    <input type="number" value={duration} placeholder='Duration of the Course in hrs'
+                    className='form-control border-dark'
+                    onChange={(e)=>setDuration(Math.abs(e.target.value))}/>
                   </div>
                   <div className="mb-3">
                     <Select bordered={false} placeholder="Select Accessibility" 
