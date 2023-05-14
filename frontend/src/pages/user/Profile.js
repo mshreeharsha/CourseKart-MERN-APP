@@ -2,13 +2,15 @@
 import React,{useState,useEffect} from 'react'
 import Layout from '../../components/Layout/Layout'
 import UserMenu from '../../components/Layout/UserMenu'
-import { useAuth } from "../../context/auth";
+import { useAuthContext } from "../../context/auth";
 import toast from 'react-hot-toast'
-import axios from axios
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
+  const navigate=useNavigate()
   //context
-  const [auth ,setAuth] = useAuth()
+  const [auth ,setAuth] = useAuthContext()
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,11 +18,13 @@ const Profile = () => {
   const [address, setAddress] = useState("");
   //get user data
   useEffect(()=>{
+    console.log(auth)
     const {name,email,phone,address} = auth?.user;
     setName(name);
     setEmail(email);
     setPhone(phone);
     setAddress(address);
+    // eslint-disable-next-line
   },[auth?.user])
   //form function
   const handleSubmit = async (e) => {
@@ -32,16 +36,17 @@ const Profile = () => {
         toast.error(data?.error);
       }
       else{
-        setAuth({ ...auth,user: data?.updateUser});
+        setAuth({ ...auth,user: data?.updatedUser});
         let ls = localStorage.getItem("auth");  
         ls = JSON.parse(ls);
         ls.user = data.updateUser;
         localStorage.setItem("auth",JSON.stringify(ls));
         toast.success("Profile Updated Successfully");
+        navigate('/dashboard/user')
       }
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong");
+      toast.error(error.response.data.message);
     }
   };
   return (
