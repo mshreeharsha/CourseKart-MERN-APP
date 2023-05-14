@@ -19,6 +19,7 @@ const UpdateCourse = () => {
     const [instructor,setInstructor]=useState("")
     const [accessible,setAccessible]=useState("")
     const [id,setId]=useState('')
+    const [topics,setTopics]=useState("")
     const navigate=useNavigate()
     const params=useParams()
   
@@ -33,7 +34,9 @@ const UpdateCourse = () => {
             setPrice(data.course.price)
             setDuration(data.course.duration)
             setInstructor(data.course.instructor._id)
+            setTopics(data.course.topics.replace(/\|/g, '\n'));
             setAccessible(data.course.accessible)
+            console.log(data.course.topics)
         } catch (error) {
             console.log(error)
             toast.error(error.response.data.message)
@@ -89,6 +92,7 @@ const UpdateCourse = () => {
       e.preventDefault()
   
       try {
+        const t=topics.replace(/\n/g, '|');
         const courseData=new FormData()
         courseData.append("name",name)
         courseData.append("description",description)
@@ -98,6 +102,7 @@ const UpdateCourse = () => {
         courseData.append("instructor",instructor)
         courseData.append("duration",duration)
         courseData.append("accessible",accessible)
+        courseData.append("topics",t)
         const {data}=await axios.put(`/api/course/update-course/${id}`,courseData)
   
         if(data?.success){
@@ -109,6 +114,7 @@ const UpdateCourse = () => {
           setAccessible("")
           setPrice("")
           setDuration("")
+          setTopics("")
           navigate('/dashboard/admin/courses')
         }
         else{
@@ -217,6 +223,11 @@ const UpdateCourse = () => {
                     onChange={(e)=>setDuration(Math.abs(e.target.value))}/>
                   </div>
                   <div className="mb-3">
+                    <textarea value={topics} placeholder='Course Content Topics'
+                    className='form-control border-dark'
+                    onChange={(e)=>setTopics(e.target.value)} rows={6}></textarea>
+                  </div>
+                  <div className="mb-3">
                     <Select bordered={false} placeholder="Select Accessibility" 
                     size="large" showSearch className='form-select mb-3 border-dark'
                     onChange={(value)=>{
@@ -231,7 +242,7 @@ const UpdateCourse = () => {
                     <button className='btn btn-primary' onClick={handleUpdate}>
                       UPDATE COURSE
                     </button>
-                    <button className='btn btn-danger' onClick={handleDelete}>
+                    <button className='btn btn-danger ms-2' onClick={handleDelete}>
                       DELETE COURSE
                     </button>
                   </div>

@@ -39,7 +39,8 @@ const Courses = () => {
                                 <img src={`/api/course/course-photo/${c._id}`} className="card-img-top" alt={c.name} />
                                 <div className="card-body">
                                     <h5 className="card-title">{c.name}</h5>
-                                    <p className="card-text">{c.description}</p>
+                                    <p className="card-title">{c.instructor.instructorName}</p>
+                                    <p className="card-text">Rs {c.price}</p>
                                 </div>
                             </div>
                         </Link>

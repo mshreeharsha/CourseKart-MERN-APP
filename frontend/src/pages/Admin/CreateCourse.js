@@ -19,6 +19,7 @@ const CreateCourse = () => {
   const [instructor,setInstructor]=useState("")
   const [duration,setDuration]=useState("")
   const [accessible,setAccessible]=useState("")
+  const [topics,setTopics]=useState("")
   const navigate=useNavigate()
 
   //Getting all category
@@ -60,11 +61,12 @@ const CreateCourse = () => {
   },[])
 
 
-  //Creating a Product
+  //Creating a Course
   const handleCreate = async(e)=>{
     e.preventDefault()
-
     try {
+      const t=topics.replace(/\n/g, '|');
+      console.log(t)
       const courseData=new FormData()
       courseData.append("name",name)
       courseData.append("description",description)
@@ -73,6 +75,7 @@ const CreateCourse = () => {
       courseData.append("photo",photo)
       courseData.append("instructor",instructor)
       courseData.append("duration",duration)
+      courseData.append("topics",t)
       courseData.append("accessible",accessible)
       const {data}=await axios.post('/api/course/create-course',courseData)
 
@@ -85,6 +88,7 @@ const CreateCourse = () => {
         setAccessible("")
         setPrice("")
         setDuration("")
+        setTopics("")
         navigate('/dashboard/admin/courses')
       }
       else{
@@ -167,6 +171,11 @@ const CreateCourse = () => {
                     <input type="number" value={duration} placeholder='Duration of the Course in hrs'
                     className='form-control border-dark'
                     onChange={(e)=>setDuration(Math.abs(e.target.value))}/>
+                  </div>
+                  <div className="mb-3">
+                    <textarea value={topics} placeholder='Course Content Topics'
+                    className='form-control border-dark'
+                    onChange={(e)=>setTopics(e.target.value)} rows={6}></textarea>
                   </div>
                   <div className="mb-3">
                     <Select bordered={false} placeholder="Select Accessibility" 
