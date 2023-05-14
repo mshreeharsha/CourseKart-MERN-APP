@@ -96,16 +96,16 @@ const loginController = async(req,res)=>{
 }
 
 //update profile
-export const updateProfileController = async(req,res)=>{
+const updateProfileController = async(req,res)=>{
     try{
         const {name,email,password,address,phone} = req.body;
-        const user = await userModel.findById(req.user._id);
+        const user = await User.findById(req.user._id);
         //password
         if(password && password.length < 6){
             return res.json({ error:"Password is reqiuired and 6 characters long" });
         }
         const hashedPassword = password ? await hashedPassword(password):undefined;
-        const updatedUser = await userModel.findByIdAndUpdate(
+        const updatedUser = await User.findByIdAndUpdate(
             req.user._id,
             {
                 name: name || user.name,
@@ -131,4 +131,4 @@ export const updateProfileController = async(req,res)=>{
     }
 };
 
-module.exports={registerController,loginController}
+module.exports={registerController,loginController,updateProfileController}
