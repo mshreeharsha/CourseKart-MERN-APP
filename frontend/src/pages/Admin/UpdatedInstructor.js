@@ -140,7 +140,7 @@ const UpdatedInstructor = () => {
                     <button className='btn btn-primary' onClick={handleUpdate}>
                       UPDATE COURSE
                     </button>
-                    <button className='btn btn-danger' onClick={handleDelete}>
+                    <button className='btn btn-danger ms-2' onClick={handleDelete}>
                       DELETE COURSE
                     </button>
                   </div>

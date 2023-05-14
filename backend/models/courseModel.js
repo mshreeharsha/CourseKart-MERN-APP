@@ -35,6 +35,9 @@ const courseModel=new Schema({
         type:Number,
         required:true
     },
+    topics: {
+        type: String,
+      },
     accessible:{
         type:Boolean
     }
