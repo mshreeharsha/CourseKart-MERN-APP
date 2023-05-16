@@ -23,6 +23,7 @@ const CreateCategory = () => {
       if(data?.success)
       {
         toast.success(`${name} is created`)
+        setName("")
         getAllCategory();
       }
       else
@@ -82,6 +83,8 @@ const CreateCategory = () => {
   // delete category
   const handleDelete = async(pId) =>{
     try{
+      let ans=window.prompt("Do You want To delete this Category?\nThis will Delete all the courses Under this Category")
+      if(ans!=="yes")return;
       const {data} = await axios.delete(`/api/category/delete-category/${pId}`)
       if(data.success)
       {

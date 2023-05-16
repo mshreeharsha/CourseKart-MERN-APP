@@ -106,12 +106,6 @@
   justify-content: center;
 }
 
-.homepage {
-  text-align: center;
-  font-size : 500%;
-  font-family : monospace;
-}
-
 .course-link{
   text-decoration: none !important;
   color:black;
@@ -130,7 +124,7 @@
   min-height: 200px;
   box-shadow: 0 2px 5px #ccc;
   text-align: left;
-  padding: 30px;
+  padding: 20px;
 }
 
 .top {
@@ -168,4 +162,8 @@
 .info {
   margin: 20px 0;
   color: #1a7e76;
+}
+
+.card-img-top {
+  height:150px; 
 }

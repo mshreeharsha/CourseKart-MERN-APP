@@ -144,7 +144,7 @@ const UpdateCourse = () => {
     }
   return (
     <div>
-      <Layout title={'DashBoard - Create Course'}>
+      <Layout title={'DashBoard - Update Course'}>
         <div className="container-fluid m-3 p-3">
             <div className="row">
                 <div className="col-md-3">

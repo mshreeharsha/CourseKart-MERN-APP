@@ -25,14 +25,14 @@ const Courses = () => {
     },[])
     
   return (
-    <Layout>
+    <Layout title={"Dashboard - All Courses"}>
         <div className="row">
             <div className="col-md-3">
                 <AdminMenu/>
             </div>
             <div className="col-md-9">
                 <h1 className="text-center">ALL COURSES LIST</h1>
-                <div className="d-flex">
+                <div className="d-flex flex-wrap">
                     {course?.map((c)=>(
                         <Link key={c._id} to={`/dashboard/admin/courses/${c.slug}`} className='course-link'>
                             <div className="card m-2" style={{width: '18rem'}} key={c._id}>
