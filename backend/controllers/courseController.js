@@ -266,4 +266,79 @@ const updateCourseController = async(req,res)=>{
     }
 }
 
-module.exports={createCourseController,getCourseController,getSingleCourseController,getPhotoController,deleteCourseController,updateCourseController}
+//Course Filter
+const courseFilterController = async(req,res)=>{
+    try {
+        const {checked,radio}=req.body
+        let args={}
+        if(checked.length>0){
+            args.category=checked
+        }
+        if(radio.length){
+            //Price range Between 0th Index and 1st Index
+            args.price={$gte:radio[0],$lte:radio[1]}
+        }
+
+        const courses=await courseModel.find(args)
+        res.status(200).send({
+            success:true,
+            courses
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({
+            success:false,
+            message:'Error in Filter by Prices',
+            error
+        })
+    }
+}
+
+//get Courses Count
+
+const courseCountController = async(req,res)=>{
+    try {
+        const total = await courseModel.find({}).estimatedDocumentCount()
+        res.status(200).send({
+            success:true,
+            total
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({
+            success:false,
+            message:'Error in Counting Total no of Courses',
+            error
+        })
+    }
+}
+
+//Course List per Page
+
+const courseListController = async(req,res)=>{
+    try {
+        const perPage=3
+        const page=req.params.page?req.params.page:1
+
+        const courses = await courseModel.find({}).select("-photo").
+        skip((page-1)*perPage).limit(perPage).sort({createdAt:-1})
+
+        res.status(200).send({
+            success:true,
+            courses
+        })
+
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({
+            success:false,
+            message:'Error in Getting Course Per Page',
+            error
+        })
+    }
+}
+
+module.exports={createCourseController,getCourseController,
+    getSingleCourseController,getPhotoController,
+    deleteCourseController,updateCourseController,courseFilterController,
+courseCountController,courseListController}
