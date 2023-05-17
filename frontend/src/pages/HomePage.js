@@ -108,7 +108,10 @@ const HomePage = () => {
   }
 
   useEffect(()=>{
-    if(checked.length===0 && radio.length===0)getAllCourses()
+    if(checked.length===0 && radio.length===0){
+      getTotalCourses()//added
+      getAllCourses()
+    }
     // eslint-disable-next-line
   },[checked.length,radio.length])
 
@@ -126,7 +129,8 @@ const HomePage = () => {
 
       if(data?.success){
         console.log(data.courses)
-        setCourses(data?.courses)
+        setCourses(data.courses)
+        setTotal(data.courses.length)//added
       }
       else{
         toast.error(data.message)
@@ -169,7 +173,7 @@ const HomePage = () => {
         <div className="col-md-9">
           <h1 className='text-center'>Courses</h1>
           <div className="d-flex flex-wrap">
-          {courses?.map((c)=>(
+              {courses.map((c)=>(
                         <Link key={c._id} to={`${c.slug}`} className='course-link'>
                             <div className="card m-2" style={{width: '18rem'}} key={c._id}>
                                 <img src={`/api/course/course-photo/${c._id}`} className="card-img-top" alt={c.name} />
@@ -183,9 +187,12 @@ const HomePage = () => {
                         </Link>
                     ))}
           </div>
+          {courses.length > 0?"": <div className="text-center mt-5">
+              <h2 className='text-center'>No Courses Available for This Filter</h2>
+              </div>}
             {
               loading?"Loading...":
-              <Pagination limit={limit} total={total} setPage={setPage}/>
+              courses.length > 0?<Pagination limit={limit} total={total} setPage={setPage}/>:""
             }
           {/* <div className='m-3 p-3'>
             {courses && courses.length<total &&(

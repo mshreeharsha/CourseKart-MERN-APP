@@ -17,7 +17,8 @@ export const Pagination = ({ limit, total, setPage }) => {
         <li className="page-item">
           <button
             className="page-link"
-            onClick={() => handlePageChange(currPage>1?currPage - 1:1)}
+            onClick={() => handlePageChange(currPage - 1)}
+            disabled={currPage <= 1}
           >
             Previous
           </button>
@@ -25,8 +26,8 @@ export const Pagination = ({ limit, total, setPage }) => {
         {pageNumbers.map((pageNumber) => (
           <li className="page-item" key={pageNumber}>
             <button
-              className="page-link"
               value={pageNumber}
+              className={pageNumber===currPage?"page-link active":"page-link"}
               onClick={() => handlePageChange(pageNumber)}
             >
               {pageNumber}
@@ -36,7 +37,8 @@ export const Pagination = ({ limit, total, setPage }) => {
         <li className="page-item">
           <button
             className="page-link"
-            onClick={() => handlePageChange(currPage<totalPages?currPage+1:totalPages)}
+            onClick={() => handlePageChange(currPage+1)}
+            disabled={currPage >= totalPages}
           >
             Next
           </button>
