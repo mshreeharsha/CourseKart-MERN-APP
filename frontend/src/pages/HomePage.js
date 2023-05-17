@@ -8,8 +8,10 @@ import { Link } from 'react-router-dom'
 import {Checkbox,Radio} from 'antd'
 import { Prices } from '../components/Prices'
 import { Pagination } from '../components/CoursePagination'
+import { useCart } from '../context/cart'
 
 const HomePage = () => {
+  const [cart,setCart] = useCart()
   const [courses,setCourses]=useState([])
   const [categories,setCategories]=useState([])
   const [checked,setChecked]=useState([])
@@ -18,7 +20,7 @@ const HomePage = () => {
   const [page,setPage]=useState(1)
   const [loading,setLoading]=useState(false)
   const limit=3
-
+ 
   //Handling Filter by Category
   const handleFilter = async(value,id)=>{
     console.log(value,id)
@@ -181,7 +183,14 @@ const HomePage = () => {
                                     <h5 className="card-title">{c.name}</h5>
                                     <span className="card-title">{c.instructor.instructorName}</span>
                                     <p className="card-text"><strong> ₹{c.price}</strong></p>
-                                    <button className='btn btn-outline-secondary'>Add to Cart</button>
+                                    <button className='btn btn-outline-secondary'
+                                     onClick={() => {
+                                      setCart([...cart,c])
+                                      localStorage.setItem('cart',JSON.stringify([...cart,c]))
+                                      toast.success('Item Added to Cart')
+                                      }}>
+                                      Add to Cart
+                                    </button>
                                 </div>
                             </div>
                         </Link>
