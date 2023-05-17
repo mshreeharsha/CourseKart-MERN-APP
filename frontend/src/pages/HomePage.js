@@ -16,15 +16,17 @@ const HomePage = () => {
 
   //Handling Filter by Category
   const handleFilter = async(value,id)=>{
-    let all=[...categories]
+    console.log(value,id)
+    let all=[...checked]
     if(value){
       //when Checked
-      all=all.push(id)
+      all.push(id)
     }
     else{
       //When unChecked
-      all=all.filter(c=>c!==id)
+      all=all.filter((c)=>c!==id)
     }
+    //Creating an Array of Category Id's which are been selected and stored in checked
     setChecked(all)
   }
 
@@ -65,9 +67,36 @@ const HomePage = () => {
   }
 
   useEffect(()=>{
-    getAllCourses()
+    if(checked.length===0 && radio.length===0)getAllCourses()
+  },[checked.length,radio.length])
+
+  //Get Filtered Courses
+  useEffect(()=>{
+    if(checked.length>0 || radio.length>0){
+      filterCourses()
+    }
     // eslint-disable-next-line
-  },[])
+  },[checked,radio])
+
+  const filterCourses = async()=>{
+    try {
+      const {data}= await axios.post('/api/course/course-filter',{checked,radio})
+
+      if(data?.success){
+        console.log(data.courses)
+        setCourses(data?.courses)
+      }
+      else{
+        toast.error(data.message)
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error(error.response.data.message)
+    }
+  }
+
+  
+
   return (
     <Layout title="Online Courses - CourseKart (Skill++)">
       <div className="row mt-3">
@@ -80,11 +109,12 @@ const HomePage = () => {
             </Checkbox>
             </div>
           ))}
-          <h4 className="text-center mt-4">Filter by Category</h4>
+          <h4 className="text-center mt-4">Filter by Price</h4>
           <div className="d-flex flex-column ms-3">
-            <Radio.Group onChange={(e)=>setRadio(e.target.radio)}>
+            <Radio.Group onChange={(e)=>{setRadio(e.target.value)}}>
               {Prices?.map((p)=>(
                 <div key={p._id}>
+                  {/*The Selected Option's Value that is the Price array is set to radio which is sent as a request*/ }
                   <Radio value={p.array}>{p.name}</Radio>
                 </div>
               ))}

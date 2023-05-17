@@ -13,7 +13,8 @@ const {createCourseController,
     getSingleCourseController,
     getPhotoController,
     deleteCourseController,
-    updateCourseController} = require('../controllers/courseController')
+    updateCourseController,
+    courseFilterController} = require('../controllers/courseController')
 
 //creating a new Course
 
@@ -34,4 +35,6 @@ router.delete('/delete-course/:pid',requireSignIn,isAdmin,deleteCourseController
 //update Course
 router.put('/update-course/:cid',requireSignIn,isAdmin,formidable(),updateCourseController)
 
+//course Price Filter
+router.post('/course-filter',courseFilterController);
 module.exports=router

@@ -266,4 +266,34 @@ const updateCourseController = async(req,res)=>{
     }
 }
 
-module.exports={createCourseController,getCourseController,getSingleCourseController,getPhotoController,deleteCourseController,updateCourseController}
+//Course Filter
+const courseFilterController = async(req,res)=>{
+    try {
+        const {checked,radio}=req.body
+        let args={}
+        if(checked.length>0){
+            args.category=checked
+        }
+        if(radio.length){
+            //Price range Between 0th Index and 1st Index
+            args.price={$gte:radio[0],$lte:radio[1]}
+        }
+
+        const courses=await courseModel.find(args)
+        res.status(200).send({
+            success:true,
+            courses
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({
+            success:false,
+            message:'Error in Filter by Prices',
+            error
+        })
+    }
+}
+
+module.exports={createCourseController,getCourseController,
+    getSingleCourseController,getPhotoController,
+    deleteCourseController,updateCourseController,courseFilterController}
