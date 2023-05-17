@@ -7,12 +7,17 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 import {Checkbox,Radio} from 'antd'
 import { Prices } from '../components/Prices'
+import { Pagination } from '../components/CoursePagination'
 
 const HomePage = () => {
   const [courses,setCourses]=useState([])
   const [categories,setCategories]=useState([])
   const [checked,setChecked]=useState([])
   const [radio,setRadio]=useState([])
+  const [total,setTotal]=useState(0)
+  const [page,setPage]=useState(1)
+  const [loading,setLoading]=useState(false)
+  const limit=3
 
   //Handling Filter by Category
   const handleFilter = async(value,id)=>{
@@ -30,6 +35,38 @@ const HomePage = () => {
     setChecked(all)
   }
 
+  //Fetching Total No of Courses
+
+  const getTotalCourses=async()=>{
+    try {
+      const {data}=await axios.get('/api/course/course-count')
+      if(data?.success){
+        setTotal(data?.total)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
+  //Load More
+
+  const loadMore=async()=>{
+    try {
+      const {data}=await axios.get(`/api/course/course-list/${page}`)
+      if(data?.success){
+        setCourses([...data.courses])
+      }
+    } catch (error) {
+      console.log(error)
+
+    }
+  }
+
+  useEffect(()=>{
+    loadMore()
+    // eslint-disable-next-line
+  },[page])
   // Fetching all categories
   const getAllCategory = async () => {
     try {
@@ -45,6 +82,7 @@ const HomePage = () => {
 
   useEffect(() => {
       getAllCategory();
+      getTotalCourses();
       // eslint-disable-next-line
   },[])
 
@@ -53,7 +91,9 @@ const HomePage = () => {
   const getAllCourses=async()=>{
 
     try {
-      const {data}=await axios.get('/api/course/get-course')
+      setLoading(true)
+      const {data}=await axios.get(`/api/course/course-list/${page}`)
+      setLoading(false)
       if(data?.success){
         setCourses(data?.courses)
       }
@@ -61,6 +101,7 @@ const HomePage = () => {
         toast.error(data.message)
       }
     } catch (error) {
+      setLoading(false)
       console.log(error)
       toast.error(error.response.data.message)
     }
@@ -68,6 +109,7 @@ const HomePage = () => {
 
   useEffect(()=>{
     if(checked.length===0 && radio.length===0)getAllCourses()
+    // eslint-disable-next-line
   },[checked.length,radio.length])
 
   //Get Filtered Courses
@@ -120,6 +162,9 @@ const HomePage = () => {
               ))}
             </Radio.Group>
           </div>
+          <div className="d-flex flex-column ms-3 mt-3">
+            <button className='btn btn-warning' onClick={()=>window.location.reload()}>RESET</button>
+          </div>
         </div>
         <div className="col-md-9">
           <h1 className='text-center'>Courses</h1>
@@ -138,6 +183,21 @@ const HomePage = () => {
                         </Link>
                     ))}
           </div>
+            {
+              loading?"Loading...":
+              <Pagination limit={limit} total={total} setPage={setPage}/>
+            }
+          {/* <div className='m-3 p-3'>
+            {courses && courses.length<total &&(
+              <button className='btn btn-warning'
+              onClick={(e)=>{
+                e.preventDefault()
+                setPage(page+1)
+              }}>
+                {loading?"Loading ...":"Load More"}
+              </button>
+            )}
+          </div> */}
         </div>
       </div>
     </Layout>
