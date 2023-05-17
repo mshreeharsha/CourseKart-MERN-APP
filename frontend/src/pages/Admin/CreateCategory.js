@@ -23,6 +23,7 @@ const CreateCategory = () => {
       if(data?.success)
       {
         toast.success(`${name} is created`)
+        setName("")
         getAllCategory();
       }
       else
@@ -33,7 +34,7 @@ const CreateCategory = () => {
     catch(error)
     {
       console.log(error)
-      toast.error('Something went wrong in Input Form')
+      toast.error(error.response.data.message)
     }
   }
 
@@ -41,9 +42,9 @@ const CreateCategory = () => {
   const getAllCategory = async () => {
     try {
         const {data} = await axios.get('/api/category/get-category')
-        if(data.success)
+        if(data?.success)
         {
-            setCategories(data.category);
+            setCategories(data?.category);
         }
     } catch (error) {
       console.log(error)
@@ -82,6 +83,8 @@ const CreateCategory = () => {
   // delete category
   const handleDelete = async(pId) =>{
     try{
+      let ans=window.prompt("Do You want To delete this Category?\nThis will Delete all the courses Under this Category")
+      if(ans!=="yes")return;
       const {data} = await axios.delete(`/api/category/delete-category/${pId}`)
       if(data.success)
       {

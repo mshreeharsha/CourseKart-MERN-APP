@@ -1,4 +1,3 @@
-
 import {Routes,Route} from 'react-router-dom'
 import HomePage from './pages/HomePage';
 import About from './pages/About';
@@ -17,11 +16,18 @@ import CreateCategory from './pages/Admin/CreateCategory';
 import CreateCourse from './pages/Admin/CreateCourse';
 import CreateInstructor from './pages/Admin/CreateInstructor';
 import Users from './pages/Admin/Users';
+import Courses from './pages/Admin/Courses';
+import UpdateCourse from './pages/Admin/UpdateCourse';
+import UpdatedInstructor from './pages/Admin/UpdatedInstructor';
 
 import PrivateRoute from './components/routes/Private';
 import AdminRoute from './components/routes/AdminRoute';
 
 import { Toaster } from 'react-hot-toast';
+import CartPage from './pages/CartPage';
+
+
+
 
 
 function App() {
@@ -40,8 +46,11 @@ function App() {
         <Route path='admin' element = {<AdminDashboard/>}/>
         <Route path='admin/create-category' element={<CreateCategory/>}/>
         <Route path='admin/create-course' element={<CreateCourse/>}/>
+        <Route path='admin/courses/:slug' element={<UpdateCourse/>}/>
+        <Route path='admin/instructor/:slug' element={<UpdatedInstructor/>}/>
         <Route path='admin/create-instructor' element={<CreateInstructor/>}/>
         <Route path='admin/users' element={<Users/>}/>
+        <Route path='admin/courses' element={<Courses/>}/>
       </Route>
       <Route path='/register' element = {<Register/>}/>
       <Route path='/login' element = {<Login/>}/>
@@ -49,6 +58,7 @@ function App() {
       <Route path='/contact' element = {<Contact/>}/>
       <Route path='/policy' element = {<Policy/>}/>
       <Route path='/*' element = {<Pagenotfound/>}/>
+      <Route path='/cart' element = {<CartPage/>}/>
     </Routes>
     </div>
   );

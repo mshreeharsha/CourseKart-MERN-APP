@@ -1,5 +1,5 @@
 const express=require('express')
-const {registerController,loginController} =require('../controllers/userController')
+const {registerController,loginController,updateProfileController} =require('../controllers/userController')
 const router=express.Router()
 
 //Authorization
@@ -9,19 +9,22 @@ const {requireSignIn,isAdmin}=require('../middleware/requireAuth')
 router.post('/register',registerController)
 
 //Login Route
-router.post('/login',loginController)
+router.post('/login',loginController);
 
 //Protected route for User
 //User must be Signed in
 
 router.get('/user-auth',requireSignIn,(req,res)=>{
     res.status(200).send({ok:true})
-})
+});
 
 //Protected Admin Route Signed in and Must be a Admin
 
 router.get('/admin-auth',requireSignIn,isAdmin,(req,res)=>{
     res.status(200).send({ok:true})
-})
+});
+
+//update profile
+router.put("/profile",requireSignIn,updateProfileController);
 
 module.exports=router

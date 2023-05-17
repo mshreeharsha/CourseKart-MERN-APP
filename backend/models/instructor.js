@@ -12,12 +12,16 @@ const instructorSchema=new Schema({
         lowercase:true
     },
     courses:[{
-        type: mongoose.ObjectId,
-        ref: 'Course'
+        type:mongoose.ObjectId,
+        ref:'Course'
       }],
     instructorDetails:{
         type:String,
         required:true
+    },
+    photo:{
+        data:Buffer,
+        contentType:String
     }
 },{timestamps:true})
 

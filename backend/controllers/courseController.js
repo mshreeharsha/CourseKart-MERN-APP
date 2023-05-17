@@ -8,7 +8,7 @@ const fs = require('fs')
 
 const createCourseController = async(req,res)=>{
     try {
-        const{name,slug,description,price,category,instructor,accessible}=req.fields
+        const{name,slug,description,price,category,instructor,duration,topics,accessible}=req.fields
 
         const {photo}=req.files
 
@@ -35,6 +35,18 @@ const createCourseController = async(req,res)=>{
                 return res.status(500).send({
                     message:'Instructor is Required'
                 })
+            case !duration:
+                return res.status(500).send({
+                    message:'Duration is Required'
+                })
+            case !topics:
+                return res.status(500).send({
+                    message:'Topics is Required'
+                })
+            case !accessible:
+                return res.status(500).send({
+                    message:'Accessible is Required'
+                })
             case photo && photo.size>100000:
                 return res.status(500).send({
                     message:'Photo is Required and should be less than 1MB'
@@ -50,7 +62,6 @@ const createCourseController = async(req,res)=>{
                 message:'Course Already Exists'
             })
         }
-
         const course = new courseModel({...req.fields,slug:slugify(name)})
 
         if(photo){
@@ -150,7 +161,7 @@ const deleteCourseController =async(req,res)=>{
         const course=await courseModel.findByIdAndDelete(pid).select("-photo")
         const instructor=course.instructor
         await instructorModel.findOneAndUpdate({_id:instructor},
-            { $pull: { courses: pid } },
+            { $pull: { courses: course._id } },
             { new: true })
         res.status(200).send({
             success:true,
@@ -177,11 +188,11 @@ const updateCourseController = async(req,res)=>{
         const oldInstructor=oldCourse.instructor
         console.log(oldInstructor)
         await instructorModel.findOneAndUpdate({_id:oldInstructor},
-            { $pull: { courses: cid } },
+            { $pull: { courses: oldCourse._id } },
             { new: true })
 
 
-        const{name,slug,description,price,category,instructor,accessible}=req.fields
+        const{name,slug,description,price,category,instructor,duration,topics,accessible}=req.fields
 
         const {photo}=req.files
 
@@ -208,6 +219,18 @@ const updateCourseController = async(req,res)=>{
                 return res.status(500).send({
                     message:'Instructor is Required'
                 })
+            case !duration:
+                return res.status(500).send({
+                    message:'Duration is Required'
+                })
+            case !topics:
+                return res.status(500).send({
+                    message:'Topics is Required'
+                })
+            case !accessible:
+                return res.status(500).send({
+                    message:'Accessible is Required'
+                })
             case photo && photo.size>100000:
                 return res.status(500).send({
                     message:'Photo is Required and should be less than 1MB'
@@ -225,7 +248,7 @@ const updateCourseController = async(req,res)=>{
 
         await course.save()
         await instructorModel.findOneAndUpdate({_id:instructor},
-            { $push: { courses: cid } },
+            { $push: { courses: course._id } },
             { new: true })
         res.status(201).send({
             success:true,
@@ -243,4 +266,79 @@ const updateCourseController = async(req,res)=>{
     }
 }
 
-module.exports={createCourseController,getCourseController,getSingleCourseController,getPhotoController,deleteCourseController,updateCourseController}
+//Course Filter
+const courseFilterController = async(req,res)=>{
+    try {
+        const {checked,radio}=req.body
+        let args={}
+        if(checked.length>0){
+            args.category=checked
+        }
+        if(radio.length){
+            //Price range Between 0th Index and 1st Index
+            args.price={$gte:radio[0],$lte:radio[1]}
+        }
+
+        const courses=await courseModel.find(args)
+        res.status(200).send({
+            success:true,
+            courses
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({
+            success:false,
+            message:'Error in Filter by Prices',
+            error
+        })
+    }
+}
+
+//get Courses Count
+
+const courseCountController = async(req,res)=>{
+    try {
+        const total = await courseModel.find({}).estimatedDocumentCount()
+        res.status(200).send({
+            success:true,
+            total
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({
+            success:false,
+            message:'Error in Counting Total no of Courses',
+            error
+        })
+    }
+}
+
+//Course List per Page
+
+const courseListController = async(req,res)=>{
+    try {
+        const perPage=3
+        const page=req.params.page?req.params.page:1
+
+        const courses = await courseModel.find({}).select("-photo").
+        skip((page-1)*perPage).limit(perPage).sort({createdAt:-1})
+
+        res.status(200).send({
+            success:true,
+            courses
+        })
+
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({
+            success:false,
+            message:'Error in Getting Course Per Page',
+            error
+        })
+    }
+}
+
+module.exports={createCourseController,getCourseController,
+    getSingleCourseController,getPhotoController,
+    deleteCourseController,updateCourseController,courseFilterController,
+courseCountController,courseListController}
