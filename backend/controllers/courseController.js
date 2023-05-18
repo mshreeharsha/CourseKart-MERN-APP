@@ -342,7 +342,28 @@ const courseListController = async(req,res)=>{
     }
 }
 
+const searchCourseController = async(req,res) => {
+    try {
+        const{keyword} = req.params
+        const results = await courseModel.find({
+            $or: [
+                {name :{$regex : keyword , $options: "i"}},
+                {description :{$regex : keyword , $options: "i"}},
+            ]
+        }).select("-photo");
+        res.json(results)
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({
+            success: false,
+            message: "Error in search course api",
+            error
+        })
+    }
+}
+
+
 module.exports={createCourseController,getCourseController,
     getSingleCourseController,getPhotoController,
     deleteCourseController,updateCourseController,courseFilterController,
-courseCountController,courseListController}
+courseCountController,courseListController,searchCourseController}
