@@ -99,6 +99,7 @@ const getCourseController = async(req,res)=>{
         const courses= await courseModel.find({}).populate('category').populate('instructor')
         .select("-photo").limit(10).sort({createdAt:-1})
 
+        console.log(courses)
         res.status(200).send({
             success:true,
             count:courses.length,
@@ -278,7 +279,8 @@ const courseFilterController = async(req,res)=>{
             //Price range Between 0th Index and 1st Index
             args.price={$gte:radio[0],$lte:radio[1]}
         }
-
+        args.accessible=true
+        console.log(args)
         const courses=await courseModel.find(args)
         res.status(200).send({
             success:true,
@@ -298,7 +300,9 @@ const courseFilterController = async(req,res)=>{
 
 const courseCountController = async(req,res)=>{
     try {
-        const total = await courseModel.find({}).estimatedDocumentCount()
+        // const total = await courseModel.find({}).estimatedDocumentCount()
+        const total = await courseModel.countDocuments({ accessible: true })
+        console.log(total)
         res.status(200).send({
             success:true,
             total
@@ -320,7 +324,7 @@ const courseListController = async(req,res)=>{
         const perPage=3
         const page=req.params.page?req.params.page:1
 
-        const courses = await courseModel.find({}).select("-photo").
+        const courses = await courseModel.find({accessible:true}).select("-photo").
         skip((page-1)*perPage).limit(perPage).sort({createdAt:-1})
 
         res.status(200).send({
