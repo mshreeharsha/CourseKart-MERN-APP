@@ -5,6 +5,7 @@ import { useAuthContext } from '../../context/auth'
 import  {toast} from 'react-hot-toast'
 import { useCart } from '../../context/cart'
 import {Badge} from "antd"
+import SearchInput from '../Form/SearchInput'
 
 
 const Header = () => {
@@ -36,6 +37,7 @@ const Header = () => {
         <BookBookmark size={32} /> CourseKart
       </Link>
       <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+        <SearchInput/>
         <li className="nav-item">
           <NavLink to='/' className="nav-link" aria-current="page" href="#">Home</NavLink>
         </li>

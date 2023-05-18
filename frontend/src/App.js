@@ -25,6 +25,7 @@ import AdminRoute from './components/routes/AdminRoute';
 
 import { Toaster } from 'react-hot-toast';
 import CartPage from './pages/CartPage';
+import Search from './pages/Search';
 
 
 
@@ -37,6 +38,7 @@ function App() {
       <Toaster />
     <Routes>
       <Route path='/' element = {<HomePage/>}/>
+      <Route path='/search' element = {<Search/>}/>
       <Route path='/dashboard' element = {<PrivateRoute/>}>
           <Route path='user' element = {<Dashboard/>}/>
           <Route path='user/profile' element={<Profile/>}/>
