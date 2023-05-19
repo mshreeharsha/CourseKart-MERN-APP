@@ -1,12 +1,12 @@
-const express=require('express')
-const {registerController,loginController,updateProfileController} =require('../controllers/userController')
-const router=express.Router()
+const express=require('express');
+const {registerController,loginController,updateProfileController, getOrdersController, getAllOrdersController,orderStatusController} =require('../controllers/userController');
+const router=express.Router();
 
 //Authorization
-const {requireSignIn,isAdmin}=require('../middleware/requireAuth')
+const {requireSignIn,isAdmin}=require('../middleware/requireAuth');
 
 //register Route
-router.post('/register',registerController)
+router.post('/register',registerController);
 
 //Login Route
 router.post('/login',loginController);
@@ -15,16 +15,25 @@ router.post('/login',loginController);
 //User must be Signed in
 
 router.get('/user-auth',requireSignIn,(req,res)=>{
-    res.status(200).send({ok:true})
+    res.status(200).send({ok:true});
 });
 
 //Protected Admin Route Signed in and Must be a Admin
 
 router.get('/admin-auth',requireSignIn,isAdmin,(req,res)=>{
-    res.status(200).send({ok:true})
+    res.status(200).send({ok:true});
 });
 
 //update profile
 router.put("/profile",requireSignIn,updateProfileController);
 
-module.exports=router
+//orders
+router.get("/orders",requireSignIn,getOrdersController);
+
+// all orders
+router.get("/all-orders",requireSignIn,isAdmin,getAllOrdersController);
+
+//order sattus update
+router.put("/orders-status",requireSignIn,isAdmin,orderStatusController);
+
+module.exports=router;
