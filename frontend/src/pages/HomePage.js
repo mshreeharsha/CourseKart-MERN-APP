@@ -176,11 +176,11 @@ const HomePage = () => {
         </div>
         <div className="col-md-9">
           <h1 className='text-center'>Courses</h1>
-          <div className="d-flex flex-wrap">
+          <div className="d-flex flex-row">
               {courses.map((c)=>(
                         
                             <div className="card m-2" style={{width: '18rem'}} key={c._id}>
-                                <Link key={c._id} to={`${c.slug}`} className='course-link'>
+                                <Link key={c._id} to={`/course/${c.slug}`} className='course-link'>
                                 <img src={`/api/course/course-photo/${c._id}`} className="card-img-top" alt={c.name} />
                                 <div className="card-body">
                                     <h5 className="card-title">{c.name}</h5>

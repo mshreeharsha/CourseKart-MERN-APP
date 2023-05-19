@@ -281,7 +281,7 @@ const courseFilterController = async(req,res)=>{
         }
         args.accessible=true
         console.log(args)
-        const courses=await courseModel.find(args)
+        const courses=await courseModel.find(args).populate("instructor").populate("category")
         res.status(200).send({
             success:true,
             courses
@@ -325,7 +325,7 @@ const courseListController = async(req,res)=>{
         const page=req.params.page?req.params.page:1
 
         const courses = await courseModel.find({accessible:true}).select("-photo").
-        skip((page-1)*perPage).limit(perPage).sort({createdAt:-1})
+        skip((page-1)*perPage).limit(perPage).sort({createdAt:-1}).populate("instructor").populate("category")
 
         res.status(200).send({
             success:true,
@@ -350,7 +350,7 @@ const searchCourseController = async(req,res) => {
                 {name :{$regex : keyword , $options: "i"}},
                 {description :{$regex : keyword , $options: "i"}},
             ],accessible:true
-        }).select("-photo");
+        }).select("-photo").populate("instructor").populate("category");
         res.json(results)
     } catch (error) {
         console.log(error)

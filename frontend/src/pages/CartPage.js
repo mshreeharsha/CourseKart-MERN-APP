@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 
 const CartPage = () => {
-    const [cart,setCart] = useCart()
+    const [cart,setCart] = useCart([])
     const [auth,setAuth] = useAuthContext()
     const navigate  = useNavigate()
 
