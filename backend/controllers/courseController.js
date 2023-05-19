@@ -349,7 +349,7 @@ const searchCourseController = async(req,res) => {
             $or: [
                 {name :{$regex : keyword , $options: "i"}},
                 {description :{$regex : keyword , $options: "i"}},
-            ]
+            ],accessible:true
         }).select("-photo");
         res.json(results)
     } catch (error) {
