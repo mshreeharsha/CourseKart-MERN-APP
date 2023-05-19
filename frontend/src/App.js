@@ -26,9 +26,7 @@ import AdminRoute from './components/routes/AdminRoute';
 import { Toaster } from 'react-hot-toast';
 import CartPage from './pages/CartPage';
 import Search from './pages/Search';
-
-
-
+import CourseDetails from './pages/CourseDetails';
 
 
 function App() {
@@ -39,6 +37,7 @@ function App() {
     <Routes>
       <Route path='/' element = {<HomePage/>}/>
       <Route path='/search' element = {<Search/>}/>
+      <Route path='/course/:slug' element = {<CourseDetails/>}/>
       <Route path='/dashboard' element = {<PrivateRoute/>}>
           <Route path='user' element = {<Dashboard/>}/>
           <Route path='user/profile' element={<Profile/>}/>

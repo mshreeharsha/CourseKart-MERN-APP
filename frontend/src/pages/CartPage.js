@@ -3,9 +3,10 @@ import Layout from './../components/Layout/Layout'
 import { useCart } from '../context/cart'
 import { useAuthContext  } from '../context/auth'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-hot-toast'
 
 const CartPage = () => {
-    const [cart,setCart] = useCart()
+    const [cart,setCart] = useCart([])
     const [auth,setAuth] = useAuthContext()
     const navigate  = useNavigate()
 
@@ -27,6 +28,7 @@ const CartPage = () => {
             myCart.splice(index,1)
             setCart(myCart); 
             localStorage.setItem('cart',JSON.stringify(myCart))
+            toast.success("Item Removed from Cart")
         } catch (error) {
             console.log(error);
         }
@@ -48,29 +50,21 @@ const CartPage = () => {
             </div>
             <div className='row'>
                 <div className='col-md-9'>
-                    <div className='row'>
-                        {
-                            cart?.map((c) => (
-                                <div className='row m-2 card flex-row'>
-                                    <div className='col-md-4'>
-                                        <img src={`/api/course/course-photo/${c._id}`}
-                                         className="card-img-top"
-                                         alt={c.name} 
-                                         width="100px"
-                                         height = {"100px"}
-                                        />
-                                    </div>
-                                    <div className='col-md-8'>
-                                        <p>{c.name}</p>
-                                        <p>{c.description.substring(0,500)}</p>
-                                        <p> Price : {c.price}</p>
-                                        <button className='btn btn-danger' onClick={() => removeCartItem(c._id)}>Remove</button>
-                                    </div>
+                    <div className="d-flex flex-wrap">
+                        {cart?.map((c) => (
+                                <div className="card m-2" style={{width: '18rem'}} key={c._id}>
+                                <img src={`/api/course/course-photo/${c._id}`} className="card-img-top" alt={c.name} />
+                                <div className="card-body">
+                                    <h5 className="card-title">{c.name}</h5>
+                                    <span className="card-title">{c.instructor.instructorName}</span>
+                                    <p className="card-text"><strong> ₹{c.price}</strong></p>
+                                    <button className='btn btn-danger' onClick={() => removeCartItem(c._id)}>Remove</button>
+                                </div>
                                 </div>
                             ))
                         }
                     </div>
-                </div>
+                </div>    
                 <div className='col-md-3 text-center'>
                     <h2>
                         Cart Summary
