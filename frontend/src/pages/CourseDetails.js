@@ -10,6 +10,7 @@ const CourseDetails = () => {
     const params=useParams()
 
     const [course,setCourse]=useState({})
+    const [inst,setInstructor]=useState({})
 
     const[relCourses,setRelCourses] = useState([])
     //Get Course
@@ -28,7 +29,10 @@ const CourseDetails = () => {
     }
 
     useEffect(()=>{
-        if(params.slug)getCourse()
+        if(params.slug){
+            getCourse()
+        }
+        // eslint-disable-next-line
     },[params.slug])
 
     //get similar courses
@@ -40,11 +44,11 @@ const CourseDetails = () => {
             console.log(error);
         }
     }
-
+    console.log(course)
   return (
     <Layout>
         <h1 className='text-center'>{course.name}</h1>
-        <div className="container d-flex flex-row" style={{marginTop:'50px'}}>
+        <div className="container d-flex flex-row border border-info-subtle border-4 p-2 mb-2" style={{marginTop:'50px',maxWidth:'70%'}}>
             <div className="col-mt-3">
                 <img
                 src={`/api/course/course-photo/${course._id}`}
@@ -60,17 +64,53 @@ const CourseDetails = () => {
                     </h3>
                 </div>
             </div>
-            <div className="col-mt-3 border border-info-subtle border-4 p-2 mb-2" style={{ marginLeft: '20px' }}>
+            <div className="col-mt-3" 
+            style={{ marginLeft: '20px',maxWidth:'70%' }}>
                 <h2>Description</h2>
                 <div><p style={{fontSize:'18px'}}>{course.description}</p></div>
             </div>
         </div>
-        <div className="container" style={{marginTop:'50px'}}>
-            <div className="row">
+        <div className="container" style={{marginTop:'50px',maxWidth:'70%'}}>
+            <div className="col-mt-3 border border-warning border-2 p-2 mb-2"
+            style={{maxWidth:'50%'}}>
                 <h2>Course Content</h2>
+                <div>
+                    {
+                        course.topics && (
+                            <ul>
+                                {course && course.topics.split('|').map((topic, index) => (
+                                    <li key={index}>{topic}</li>
+                                ))}
+                            </ul>
+                        )
+                    }
+                </div>
             </div>
         </div>
-        <div>
+        <div className="container" style={{marginTop:'50px',maxWidth:'70%'}}>
+            <div className="col-mt-3 border border-danger-subtle border-2 p-2 mb-2">
+                <h2>Instructor Details</h2>
+                {
+                    course.instructor && (
+                        <div className='d-flex flex-row'>
+                            <div className="col-mt-3 ms-6">
+                                <img
+                                src={`/api/instructor/instructor-photo/${course.instructor._id}`}
+                                className="card-img-top"
+                                alt={course.instructor.instructorName}
+                                style={{ height: '200px', width: '200px' }}
+                                />
+                                <h4>{course.instructor.instructorName}</h4>
+                            </div>
+                            <div className='col-mt-6' style={{marginLeft:'10px'}}>
+                                <div><p style={{fontSize:'18px'}}>{course.instructor.instructorDetails}</p></div>
+                            </div>
+                        </div>
+                    )
+                }
+            </div>
+        </div>
+        <div className="container" style={{marginTop:'50px',maxWidth:'70%'}}>
             <h1>Similar Products</h1>
             {JSON.stringify(relCourses,null,4)}
         </div>
