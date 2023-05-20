@@ -17,7 +17,8 @@ const {createCourseController,
     courseFilterController,
     courseCountController,
     courseListController,
-    searchCourseController} = require('../controllers/courseController')
+    searchCourseController,
+    relatedCourseController} = require('../controllers/courseController')
 
 //creating a new Course
 
@@ -49,5 +50,8 @@ router.get('/course-list/:page',courseListController)
 
 //search course
 router.get('/search/:keyword',searchCourseController)
+
+//related courses
+router.get('/related-courses/:pid/:cid',relatedCourseController)
 
 module.exports=router

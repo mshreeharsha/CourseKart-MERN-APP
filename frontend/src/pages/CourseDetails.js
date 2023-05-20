@@ -1,7 +1,6 @@
 import React from 'react'
 import Layout from '../components/Layout/Layout'
 import { useState,useEffect } from 'react'
-import { toast } from 'react-hot-toast'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
 
@@ -12,7 +11,7 @@ const CourseDetails = () => {
 
     const [course,setCourse]=useState({})
 
-
+    const[relCourses,setRelCourses] = useState([])
     //Get Course
     const getCourse = async()=>{
         try {
@@ -20,16 +19,28 @@ const CourseDetails = () => {
             if(data?.success){
                 console.log(data.course)
                 setCourse(data?.course)
+                getSimilarCourse(data?.course._id,data?.course.category._id)
             }
         } catch (error) {
             console.log(error)
-            toast.error('Failed to Load the Course Details')
+            
         }
     }
 
     useEffect(()=>{
         if(params.slug)getCourse()
     },[params.slug])
+
+    //get similar courses
+    const getSimilarCourse = async(pid,cid) => {
+        try {
+            const {data} = await axios.get(`/api/course/related-courses/${pid}/${cid}`);
+            setRelCourses(data?.courses);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
   return (
     <Layout>
         <h1 className='text-center'>{course.name}</h1>
@@ -57,8 +68,11 @@ const CourseDetails = () => {
         <div className="container" style={{marginTop:'50px'}}>
             <div className="row">
                 <h2>Course Content</h2>
-                <pre>{course.topics.replace(/\|/g,'\n')}</pre>
             </div>
+        </div>
+        <div>
+            <h1>Similar Products</h1>
+            {JSON.stringify(relCourses,null,4)}
         </div>
     </Layout>
   )

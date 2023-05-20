@@ -362,8 +362,29 @@ const searchCourseController = async(req,res) => {
     }
 }
 
+const relatedCourseController = async(req,res) => {
+    try {
+        const {pid,cid} = req.params;
+        const courses = await courseModel.find({
+            category : cid,
+            _id: {$ne : pid},
+        }).select("-photo").limit(3).populate("category");
+        res.status(200).send({
+            success:true,
+            courses,
+        });
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({
+            success : false,
+            message: "error while getting related course",
+            error
+        })
+    }
+}
+
 
 module.exports={createCourseController,getCourseController,
     getSingleCourseController,getPhotoController,
     deleteCourseController,updateCourseController,courseFilterController,
-courseCountController,courseListController,searchCourseController}
+courseCountController,courseListController,searchCourseController,relatedCourseController}
