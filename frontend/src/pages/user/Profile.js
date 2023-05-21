@@ -1,16 +1,16 @@
 
-import React,{useState,useEffect} from 'react'
-import Layout from '../../components/Layout/Layout'
-import UserMenu from '../../components/Layout/UserMenu'
+import React,{useState,useEffect} from 'react';
+import Layout from '../../components/Layout/Layout';
+import UserMenu from '../../components/Layout/UserMenu';
 import { useAuthContext } from "../../context/auth";
-import toast from 'react-hot-toast'
-import axios from 'axios'
+import toast from 'react-hot-toast';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
-  const navigate=useNavigate()
+  const navigate=useNavigate();
   //context
-  const [auth ,setAuth] = useAuthContext()
+  const [auth ,setAuth] = useAuthContext();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,7 +18,7 @@ const Profile = () => {
   const [address, setAddress] = useState("");
   //get user data
   useEffect(()=>{
-    console.log(auth)
+    console.log(auth);
     const {name,email,phone,address} = auth?.user;
     setName(name);
     setEmail(email);
@@ -92,4 +92,4 @@ const Profile = () => {
   )
 }
 
-export default Profile
+export default Profile;

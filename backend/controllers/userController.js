@@ -1,18 +1,18 @@
 
-const User=require('../models/userModel')
-const jwt=require('jsonwebtoken')
-const Order=require('../models/orderModel')
+const User=require('../models/userModel');
+const jwt=require('jsonwebtoken');
+const Order=require('../models/orderModel');
 
 
 //Function to Generate Json Web Token
 const createToken=(_id)=>{
-    return jwt.sign({_id},process.env.SECRET,{expiresIn: '3d'})
+    return jwt.sign({_id},process.env.SECRET,{expiresIn: '3d'});
 }
 
 //Register Controller
 const registerController=async(req,res)=>{
-    const {name,email,password,phone,address}=req.body
-    let emptyField=[]
+    const {name,email,password,phone,address}=req.body;
+    let emptyField=[];
     if(!name){
         emptyField.push('name')
     }
@@ -37,9 +37,9 @@ const registerController=async(req,res)=>{
     }
 
     try {
-        const user=await User.register(name,email,password,phone,address)
-        const token=createToken(User._id)
-        console.log(user)
+        const user=await User.register(name,email,password,phone,address);
+        const token=createToken(User._id);
+        console.log(user);
         res.status(200).send({
             success:true,
             message:'User Registered Successfully',
@@ -49,21 +49,21 @@ const registerController=async(req,res)=>{
                 phone: user.phone,
                 address: user.address
             },token
-        })
+        });
         
     } catch (error) {
         res.status(400).send({
             success:false,
             message:error.message,
             error
-        })
+        });
     }
 }
 
 //Login Controller
 
 const loginController = async(req,res)=>{
-    const {email,password}=req.body
+    const {email,password}=req.body;
     if(!email || !password){
         return res.status(400).send({
             success:false,
@@ -72,8 +72,8 @@ const loginController = async(req,res)=>{
     }
 
     try {
-        const user=await User.login(email,password)
-        const token=createToken(user._id)
+        const user=await User.login(email,password);
+        const token=createToken(user._id);
         res.status(200).send({
             success:true,
             message:'User Logged in Successfully',
@@ -86,13 +86,13 @@ const loginController = async(req,res)=>{
                 role: user.role,
             },
             token
-        })
+        });
     } catch (error) {
         res.status(400).send({
             success:false,
             message:error.message,
             error
-        })
+        });
     }
 }
 

@@ -1,38 +1,98 @@
-import React from 'react'
-import Layout from './../components/Layout/Layout'
-import { useCart } from '../context/cart'
-import { useAuthContext  } from '../context/auth'
-import { Link, useNavigate } from 'react-router-dom'
-import { toast } from 'react-hot-toast'
+import React,{useState,useEffect} from 'react';
+import Layout from './../components/Layout/Layout';
+import { useCart } from '../context/cart';
+import { useAuthContext  } from '../context/auth';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+import DropIn from "braintree-web-drop-in-react";
+import { AiFillWarning } from "react-icons/ai";
+import axios from "axios";
+import toast from "react-hot-toast";
+import "../styles/CartStyles.css";
+
+
+
 
 const CartPage = () => {
-    const [cart,setCart] = useCart([])
-    const [auth,setAuth] = useAuthContext()
-    const navigate  = useNavigate()
+    const [cart,setCart] = useCart([]);
+    const [auth,setAuth] = useAuthContext();
+    const [clientToken, setClientToken] = useState("");
+    const [instance, setInstance] = useState("");
+    const [loading, setLoading] = useState(false);
+    const navigate  = useNavigate();
+
+
 
     // sum of prices
     const totalPrice = () => {
         try {
-            let total = 0
+            let total = 0;
             cart?.map(item => {total = total + item.price})
-            return total
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    // delete item
-    const removeCartItem = (cid) =>  {
-        try {
-            let myCart = [...cart]
-            let index = myCart.findIndex(item => item._id === cid)
-            myCart.splice(index,1)
-            setCart(myCart); 
-            localStorage.setItem('cart',JSON.stringify(myCart))
-            toast.success("Item Removed from Cart")
+            return total;
         } catch (error) {
             console.log(error);
         }
     }
+
+
+
+    // delete item
+    const removeCartItem = (cid) =>  {
+        try {
+            let myCart = [...cart];
+            let index = myCart.findIndex(item => item._id === cid);
+            myCart.splice(index,1)
+            setCart(myCart); 
+            localStorage.setItem('cart',JSON.stringify(myCart));
+            toast.success("Item Removed from Cart");
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
+  
+
+
+     //get payment gateway token
+  const getToken = async () => {
+    try {
+      const { data } = await axios.get("/api/course/braintree/token");
+      setClientToken(data?.clientToken);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getToken();
+  }, [auth?.token]);
+
+
+
+
+  //handle payments
+  const handlePayment = async () => {
+    try {
+      setLoading(true);
+      const { nonce } = await instance.requestPaymentMethod();
+      const { data } = await axios.post("/api/course/braintree/payment", {
+        nonce,
+        cart,
+      });
+      setLoading(false);
+      localStorage.removeItem("cart");
+      setCart([]);
+      navigate("/dashboard/users/orders");
+      toast.success("Payment Completed Successfully ");
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+
+
+
     return (
     <Layout>
         <div className='container'>
@@ -92,6 +152,31 @@ const CartPage = () => {
                       Please Login to checkout
                     </button>
                     )}
+                </div>
+                <div className="mt-2">
+                {!clientToken || !auth?.token || !cart?.length ? (
+                  ""
+                ) : (
+                  <>
+                    <DropIn
+                      options={{
+                        authorization: clientToken,
+                        paypal: {
+                          flow: "vault",
+                        },
+                      }}
+                      onInstance={(instance) => setInstance(instance)}
+                    />
+
+                    <button
+                      className="btn btn-primary"
+                      onClick={handlePayment}
+                      disabled={loading || !instance}
+                    >
+                      {loading ? "Processing ...." : "Make Payment"}
+                    </button>
+                  </>
+                )}
                 </div>
             </div>
         </div>

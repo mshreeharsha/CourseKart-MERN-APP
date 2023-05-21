@@ -1,13 +1,13 @@
-const instructorModel = require('../models/instructor')
-const slugify=require('slugify')
+const instructorModel = require('../models/instructor');
+const slugify=require('slugify');
 //File System
-const fs = require('fs')
+const fs = require('fs');
 
 const createInstructorController = async(req,res)=>{
     try {
-        console.log(req.fields)
-        const {instructorName,slug,instructorDetails}=req.fields
-        const {photo}=req.files
+        console.log(req.fields);
+        const {instructorName,slug,instructorDetails}=req.fields;
+        const {photo}=req.files;
         //Validation
         if(!instructorName){
             return res.status(500).send({
@@ -24,7 +24,7 @@ const createInstructorController = async(req,res)=>{
                 message:'Photo is Required and should be less than 1MB'
             })
         }
-        const existing=await instructorModel.findOne({instructorName})
+        const existing=await instructorModel.findOne({instructorName});
 
         if(existing){
             return res.status(200).send({
