@@ -1,6 +1,6 @@
-import Layout from '../../components/Layout/Layout'
-import React from 'react'
-import AdminMenu from '../../components/Layout/AdminMenu'
+import Layout from '../../components/Layout/Layout';
+import React from 'react';
+import AdminMenu from '../../components/Layout/AdminMenu';
 
 
 const Users = () => {
@@ -18,6 +18,6 @@ const Users = () => {
         </div>
     </Layout>
   )
-}
+};
 
-export default Users
+export default Users;

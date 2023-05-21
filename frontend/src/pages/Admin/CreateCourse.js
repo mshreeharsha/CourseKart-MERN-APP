@@ -1,38 +1,38 @@
-import React,{useState,useEffect} from 'react'
-import AdminMenu from '../../components/Layout/AdminMenu'
-import Layout from '../../components/Layout/Layout'
-import axios from 'axios'
-import toast from 'react-hot-toast'
-import {Select} from 'antd'
-import { useNavigate } from 'react-router-dom'
-const {Option}=Select
+import React,{useState,useEffect} from 'react';
+import AdminMenu from '../../components/Layout/AdminMenu';
+import Layout from '../../components/Layout/Layout';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import {Select} from 'antd';
+import { useNavigate } from 'react-router-dom';
+const {Option}=Select;
 
 
 const CreateCourse = () => {
-  const [categories,setCategories] = useState([])
-  const [instructors,setInstructors] = useState([])
-  const [photo,setPhoto]=useState("")
-  const [name,setName]=useState("")
-  const [description,setDescription]=useState("")
-  const [price,setPrice]=useState("")
-  const [category,setCategory]=useState("")
-  const [instructor,setInstructor]=useState("")
-  const [duration,setDuration]=useState("")
-  const [accessible,setAccessible]=useState("")
-  const [topics,setTopics]=useState("")
-  const navigate=useNavigate()
+  const [categories,setCategories] = useState([]);
+  const [instructors,setInstructors] = useState([]);
+  const [photo,setPhoto]=useState("");
+  const [name,setName]=useState("");
+  const [description,setDescription]=useState("");
+  const [price,setPrice]=useState("");
+  const [category,setCategory]=useState("");
+  const [instructor,setInstructor]=useState("");
+  const [duration,setDuration]=useState("");
+  const [accessible,setAccessible]=useState("");
+  const [topics,setTopics]=useState("");
+  const navigate=useNavigate();
 
   //Getting all category
   const getAllCategory = async () => {
     try {
-        const {data} = await axios.get('/api/category/get-category')
+        const {data} = await axios.get('/api/category/get-category');
         if(data?.success)
         {
             setCategories(data?.category);
         }
     } catch (error) {
-      console.log(error)
-      toast.error(error.response.data.message)
+      console.log(error);
+      toast.error(error.response.data.message);
     }
   };
 
@@ -44,14 +44,14 @@ const CreateCourse = () => {
   //Getting all Instructors
   const getAllInstructor = async () => {
     try {
-        const {data} = await axios.get('/api/instructor/all-instructors')
+        const {data} = await axios.get('/api/instructor/all-instructors');
         if(data?.success)
         {
             setInstructors(data?.instructors);
         }
     } catch (error) {
-      console.log(error)
-      toast.error(error.response.data.message)
+      console.log(error);
+      toast.error(error.response.data.message);
     }
   };
 
@@ -63,41 +63,41 @@ const CreateCourse = () => {
 
   //Creating a Course
   const handleCreate = async(e)=>{
-    e.preventDefault()
+    e.preventDefault();
     try {
       const t=topics.replace(/\n/g, '|');
-      console.log(t)
-      const courseData=new FormData()
-      courseData.append("name",name)
-      courseData.append("description",description)
-      courseData.append("price",price)
-      courseData.append("category",category)
-      courseData.append("photo",photo)
-      courseData.append("instructor",instructor)
-      courseData.append("duration",duration)
-      courseData.append("topics",t)
-      courseData.append("accessible",accessible)
-      const {data}=await axios.post('/api/course/create-course',courseData)
+      console.log(t);
+      const courseData=new FormData();
+      courseData.append("name",name);
+      courseData.append("description",description);
+      courseData.append("price",price);
+      courseData.append("category",category);
+      courseData.append("photo",photo);
+      courseData.append("instructor",instructor);
+      courseData.append("duration",duration);
+      courseData.append("topics",t);
+      courseData.append("accessible",accessible);
+      const {data}=await axios.post('/api/course/create-course',courseData);
 
       if(data?.success){
-        toast.success(`${name} Course Added`)
-        setName("")
-        setDescription("")
-        setCategory("")
-        setInstructor("")
-        setAccessible("")
-        setPrice("")
-        setDuration("")
-        setTopics("")
-        navigate('/dashboard/admin/courses')
+        toast.success(`${name} Course Added`);
+        setName("");
+        setDescription("");
+        setCategory("");
+        setInstructor("");
+        setAccessible("");
+        setPrice("");
+        setDuration("");
+        setTopics("");
+        navigate('/dashboard/admin/courses');
       }
       else{
-        toast.error(data.message)
+        toast.error(data.message);
       }
 
     } catch (error) {
-      console.log(error.message)
-      toast.error(error.response.data.message)
+      console.log(error.message);
+      toast.error(error.response.data.message);
     }
   }
 
@@ -200,4 +200,4 @@ const CreateCourse = () => {
   )
 }
 
-export default CreateCourse
+export default CreateCourse;

@@ -1,45 +1,45 @@
-import React,{useState,useEffect} from 'react'
-import AdminMenu from '../../components/Layout/AdminMenu'
-import Layout from '../../components/Layout/Layout'
-import axios from 'axios'
-import toast from 'react-hot-toast'
-import {Select} from 'antd'
-import { useNavigate,useParams } from 'react-router-dom'
-const {Option}=Select
+import React,{useState,useEffect} from 'react';
+import AdminMenu from '../../components/Layout/AdminMenu';
+import Layout from '../../components/Layout/Layout';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import {Select} from 'antd';
+import { useNavigate,useParams } from 'react-router-dom';
+const {Option}=Select;
 
 const UpdateCourse = () => {
-    const [categories,setCategories] = useState([])
-    const [instructors,setInstructors] = useState([])
-    const [photo,setPhoto]=useState("")
-    const [name,setName]=useState("")
-    const [description,setDescription]=useState("")
-    const [price,setPrice]=useState("")
-    const [category,setCategory]=useState("")
-    const [duration,setDuration]=useState("")
-    const [instructor,setInstructor]=useState("")
-    const [accessible,setAccessible]=useState("")
-    const [id,setId]=useState('')
-    const [topics,setTopics]=useState("")
-    const navigate=useNavigate()
-    const params=useParams()
+    const [categories,setCategories] = useState([]);
+    const [instructors,setInstructors] = useState([]);
+    const [photo,setPhoto]=useState("");
+    const [name,setName]=useState("");
+    const [description,setDescription]=useState("");
+    const [price,setPrice]=useState("");
+    const [category,setCategory]=useState("");
+    const [duration,setDuration]=useState("");
+    const [instructor,setInstructor]=useState("");
+    const [accessible,setAccessible]=useState("");
+    const [id,setId]=useState('');
+    const [topics,setTopics]=useState("");
+    const navigate=useNavigate();
+    const params=useParams();
   
     //Get Single Course
     const getSingleCourse = async()=>{
         try {
-            const {data}= await axios(`/api/course/get-course/${params.slug}`)
-            setName(data.course.name)
-            setId(data.course._id)
-            setDescription(data.course.description)
-            setCategory(data.course.category._id)
-            setPrice(data.course.price)
-            setDuration(data.course.duration)
-            setInstructor(data.course.instructor._id)
+            const {data}= await axios(`/api/course/get-course/${params.slug}`);
+            setName(data.course.name);
+            setId(data.course._id);
+            setDescription(data.course.description);
+            setCategory(data.course.category._id);
+            setPrice(data.course.price);
+            setDuration(data.course.duration);
+            setInstructor(data.course.instructor._id);
             setTopics(data.course.topics.replace(/\|/g, '\n'));
-            setAccessible(data.course.accessible)
-            console.log(data.course.topics)
+            setAccessible(data.course.accessible);
+            console.log(data.course.topics);
         } catch (error) {
-            console.log(error)
-            toast.error(error.response.data.message)
+            console.log(error);
+            toast.error(error.response.data.message);
         }
     }
 
@@ -51,14 +51,14 @@ const UpdateCourse = () => {
     //Getting all category
     const getAllCategory = async () => {
       try {
-          const {data} = await axios.get('/api/category/get-category')
+          const {data} = await axios.get('/api/category/get-category');
           if(data?.success)
           {
               setCategories(data?.category);
           }
       } catch (error) {
-        console.log(error)
-        toast.error(error.response.data.message)
+        console.log(error);
+        toast.error(error.response.data.message);
       }
     };
   
@@ -70,14 +70,14 @@ const UpdateCourse = () => {
     //Getting all Instructors
     const getAllInstructor = async () => {
       try {
-          const {data} = await axios.get('/api/instructor/all-instructors')
+          const {data} = await axios.get('/api/instructor/all-instructors');
           if(data?.success)
           {
               setInstructors(data?.instructors);
           }
       } catch (error) {
-        console.log(error)
-        toast.error(error.response.data.message)
+        console.log(error);
+        toast.error(error.response.data.message);
       }
     };
   
@@ -89,57 +89,57 @@ const UpdateCourse = () => {
   
     //Updating a Product
     const handleUpdate = async(e)=>{
-      e.preventDefault()
+      e.preventDefault();
   
       try {
         const t=topics.replace(/\n/g, '|');
-        const courseData=new FormData()
-        courseData.append("name",name)
-        courseData.append("description",description)
-        courseData.append("price",price)
-        courseData.append("category",category)
-        photo && courseData.append("photo",photo)
-        courseData.append("instructor",instructor)
-        courseData.append("duration",duration)
-        courseData.append("accessible",accessible)
-        courseData.append("topics",t)
-        const {data}=await axios.put(`/api/course/update-course/${id}`,courseData)
+        const courseData=new FormData();
+        courseData.append("name",name);
+        courseData.append("description",description);
+        courseData.append("price",price);
+        courseData.append("category",category);
+        photo && courseData.append("photo",photo);
+        courseData.append("instructor",instructor);
+        courseData.append("duration",duration);
+        courseData.append("accessible",accessible);
+        courseData.append("topics",t);
+        const {data}=await axios.put(`/api/course/update-course/${id}`,courseData);
   
         if(data?.success){
-          toast.success(`${name} Course Added`)
-          setName("")
-          setDescription("")
-          setCategory("")
-          setInstructor("")
-          setAccessible("")
-          setPrice("")
-          setDuration("")
-          setTopics("")
-          navigate('/dashboard/admin/courses')
+          toast.success(`${name} Course Added`);
+          setName("");
+          setDescription("");
+          setCategory("");
+          setInstructor("");
+          setAccessible("");
+          setPrice("");
+          setDuration("");
+          setTopics("");
+          navigate('/dashboard/admin/courses');
         }
         else{
-          toast.error(data.message)
+          toast.error(data.message);
         }
   
       } catch (error) {
-        console.log(error)
-        toast.error(error.response.data.message)
+        console.log(error);
+        toast.error(error.response.data.message);
       }
     }
   
     //Deleting a Course
     const handleDelete = async()=>{
         try {
-            let answer=window.prompt("Do You Want to Delete This Course?")
+            let answer=window.prompt("Do You Want to Delete This Course?");
             if(answer!=="yes")return;
-            const {data}=await axios.delete(`/api/course/delete-course/${id}`)
+            const {data}=await axios.delete(`/api/course/delete-course/${id}`);
             if(data.success){
-                toast.success(data.message)
-                navigate('/dashboard/admin/courses')
+                toast.success(data.message);
+                navigate('/dashboard/admin/courses');
             }
         } catch (error) {
-            console.log(error)
-            toast.error(error.response.data.message)
+            console.log(error);
+            toast.error(error.response.data.message);
         }
     }
   return (
@@ -256,4 +256,4 @@ const UpdateCourse = () => {
   )
 }
 
-export default UpdateCourse
+export default UpdateCourse;

@@ -1,7 +1,7 @@
-import React from 'react'
-import Layout from '../../components/Layout/Layout'
-import UserMenu from '../../components/Layout/UserMenu'
-import { useAuthContext } from '../../context/auth'
+import React from 'react';
+import Layout from '../../components/Layout/Layout';
+import UserMenu from '../../components/Layout/UserMenu';
+import { useAuthContext } from '../../context/auth';
 
 const Dashboard = () => {
   const [auth]=useAuthContext()
@@ -26,4 +26,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default Dashboard;
