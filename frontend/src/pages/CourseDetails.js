@@ -10,7 +10,6 @@ const CourseDetails = () => {
     const params=useParams()
 
     const [course,setCourse]=useState({})
-    const [inst,setInstructor]=useState({})
 
     const[relCourses,setRelCourses] = useState([])
     //Get Course
