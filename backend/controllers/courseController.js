@@ -99,6 +99,7 @@ const getCourseController = async(req,res)=>{
         const courses= await courseModel.find({}).populate('category').populate('instructor')
         .select("-photo").limit(10).sort({createdAt:-1})
 
+        console.log(courses)
         res.status(200).send({
             success:true,
             count:courses.length,
@@ -278,8 +279,9 @@ const courseFilterController = async(req,res)=>{
             //Price range Between 0th Index and 1st Index
             args.price={$gte:radio[0],$lte:radio[1]}
         }
-
-        const courses=await courseModel.find(args)
+        args.accessible=true
+        console.log(args)
+        const courses=await courseModel.find(args).populate("instructor").populate("category")
         res.status(200).send({
             success:true,
             courses
@@ -298,7 +300,9 @@ const courseFilterController = async(req,res)=>{
 
 const courseCountController = async(req,res)=>{
     try {
-        const total = await courseModel.find({}).estimatedDocumentCount()
+        // const total = await courseModel.find({}).estimatedDocumentCount()
+        const total = await courseModel.countDocuments({ accessible: true })
+        console.log(total)
         res.status(200).send({
             success:true,
             total
@@ -320,8 +324,8 @@ const courseListController = async(req,res)=>{
         const perPage=3
         const page=req.params.page?req.params.page:1
 
-        const courses = await courseModel.find({}).select("-photo").
-        skip((page-1)*perPage).limit(perPage).sort({createdAt:-1})
+        const courses = await courseModel.find({accessible:true}).select("-photo").
+        skip((page-1)*perPage).limit(perPage).sort({createdAt:-1}).populate("instructor").populate("category")
 
         res.status(200).send({
             success:true,
@@ -338,7 +342,28 @@ const courseListController = async(req,res)=>{
     }
 }
 
+const searchCourseController = async(req,res) => {
+    try {
+        const{keyword} = req.params
+        const results = await courseModel.find({
+            $or: [
+                {name :{$regex : keyword , $options: "i"}},
+                {description :{$regex : keyword , $options: "i"}},
+            ],accessible:true
+        }).select("-photo").populate("instructor").populate("category");
+        res.json(results)
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({
+            success: false,
+            message: "Error in search course api",
+            error
+        })
+    }
+}
+
+
 module.exports={createCourseController,getCourseController,
     getSingleCourseController,getPhotoController,
     deleteCourseController,updateCourseController,courseFilterController,
-courseCountController,courseListController}
+courseCountController,courseListController,searchCourseController}

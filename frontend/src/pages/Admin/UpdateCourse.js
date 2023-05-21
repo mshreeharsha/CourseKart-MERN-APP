@@ -234,8 +234,8 @@ const UpdateCourse = () => {
                       setAccessible(value)
                     }}
                     value={accessible ? "Yes":"No"}>
-                      <Option value="0">No</Option>
-                      <Option value="1">Yes</Option>
+                      <Option key={"No"} value={0}>No</Option>
+                      <Option key={"Yes"} value={1}>Yes</Option>
                     </Select>
                   </div>
                   <div className="mb-3">

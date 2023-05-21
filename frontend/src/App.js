@@ -1,4 +1,3 @@
-
 import {Routes,Route} from 'react-router-dom'
 import HomePage from './pages/HomePage';
 import About from './pages/About';
@@ -25,9 +24,9 @@ import PrivateRoute from './components/routes/Private';
 import AdminRoute from './components/routes/AdminRoute';
 
 import { Toaster } from 'react-hot-toast';
-
-
-
+import CartPage from './pages/CartPage';
+import Search from './pages/Search';
+import CourseDetails from './pages/CourseDetails';
 
 
 function App() {
@@ -37,6 +36,8 @@ function App() {
       <Toaster />
     <Routes>
       <Route path='/' element = {<HomePage/>}/>
+      <Route path='/search' element = {<Search/>}/>
+      <Route path='/course/:slug' element = {<CourseDetails/>}/>
       <Route path='/dashboard' element = {<PrivateRoute/>}>
           <Route path='user' element = {<Dashboard/>}/>
           <Route path='user/profile' element={<Profile/>}/>
@@ -58,6 +59,7 @@ function App() {
       <Route path='/contact' element = {<Contact/>}/>
       <Route path='/policy' element = {<Policy/>}/>
       <Route path='/*' element = {<Pagenotfound/>}/>
+      <Route path='/cart' element = {<CartPage/>}/>
     </Routes>
     </div>
   );

@@ -4,12 +4,15 @@ import '../styles/Homepage.css'
 import { useState,useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {Checkbox,Radio} from 'antd'
 import { Prices } from '../components/Prices'
 import { Pagination } from '../components/CoursePagination'
+import { useCart } from '../context/cart'
+
 
 const HomePage = () => {
+  const [cart,setCart] = useCart([])
   const [courses,setCourses]=useState([])
   const [categories,setCategories]=useState([])
   const [checked,setChecked]=useState([])
@@ -18,7 +21,8 @@ const HomePage = () => {
   const [page,setPage]=useState(1)
   const [loading,setLoading]=useState(false)
   const limit=3
-
+  const navigate= useNavigate()
+ 
   //Handling Filter by Category
   const handleFilter = async(value,id)=>{
     console.log(value,id)
@@ -172,19 +176,31 @@ const HomePage = () => {
         </div>
         <div className="col-md-9">
           <h1 className='text-center'>Courses</h1>
-          <div className="d-flex flex-wrap">
+          <div className="d-flex flex-row">
               {courses.map((c)=>(
-                        <Link key={c._id} to={`${c.slug}`} className='course-link'>
+                        
                             <div className="card m-2" style={{width: '18rem'}} key={c._id}>
+                                <Link key={c._id} to={`/course/${c.slug}`} className='course-link'>
                                 <img src={`/api/course/course-photo/${c._id}`} className="card-img-top" alt={c.name} />
                                 <div className="card-body">
                                     <h5 className="card-title">{c.name}</h5>
                                     <span className="card-title">{c.instructor.instructorName}</span>
                                     <p className="card-text"><strong> ₹{c.price}</strong></p>
-                                    <button className='btn btn-outline-secondary'>Add to Cart</button>
                                 </div>
+                                
+                              </Link>
+                              {cart.filter(item=>item._id===c._id).length===0?
+                                (<button className='btn btn-outline-secondary'
+                                     onClick={() => {
+                                       setCart([...cart,c])
+                                       localStorage.setItem('cart',JSON.stringify([...cart,c]))
+                                       toast.success('Item Added to Cart')
+                                       navigate('/cart')
+                                      }}>
+
+                                      Add to Cart
+                                    </button>):(<button className='btn btn-outline-secondary' onClick={()=>navigate('/cart')}>Go To Cart</button>)}
                             </div>
-                        </Link>
                     ))}
           </div>
           {courses.length > 0?"": <div className="text-center mt-5">

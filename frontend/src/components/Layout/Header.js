@@ -2,11 +2,15 @@ import React from 'react'
 import { NavLink,Link } from 'react-router-dom'
 import {BookBookmark} from 'phosphor-react'
 import { useAuthContext } from '../../context/auth'
-import { toast } from 'react-hot-toast'
+import  {toast} from 'react-hot-toast'
+import { useCart } from '../../context/cart'
+import {Badge} from "antd"
+import SearchInput from '../Form/SearchInput'
 
 
 const Header = () => {
   const [auth,setAuth]=useAuthContext()
+  const [cart] = useCart()
 
   //handelling Logout Action
   //auth may contain other items othe rthan user and token
@@ -33,6 +37,7 @@ const Header = () => {
         <BookBookmark size={32} /> CourseKart
       </Link>
       <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+        <SearchInput/>
         <li className="nav-item">
           <NavLink to='/' className="nav-link" aria-current="page" href="#">Home</NavLink>
         </li>
@@ -60,7 +65,9 @@ const Header = () => {
           </ul>
         </li></>)}
         <li className="nav-item">
-          <NavLink to='/cart' className="nav-link" href="#">Cart (0)</NavLink>
+        <Badge count={cart?.length} showZero>
+          <NavLink to='/cart' className="nav-link" href="#">Cart </NavLink>
+        </Badge>
         </li>
         
       </ul>
