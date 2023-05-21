@@ -345,6 +345,9 @@ const courseListController = async(req,res)=>{
 const searchCourseController = async(req,res) => {
     try {
         const{keyword} = req.params
+        
+        //$regex: keyword, $options: "i": The $regex operator performs a regular expression search on the specified field. In this case, it matches the keyword value in a case-insensitive manner ($options: "i").
+
         const results = await courseModel.find({
             $or: [
                 {name :{$regex : keyword , $options: "i"}},
@@ -365,10 +368,13 @@ const searchCourseController = async(req,res) => {
 const relatedCourseController = async(req,res) => {
     try {
         const {pid,cid} = req.params;
+
+        //$ne: pid, the query ensures that the returned courses do not have the same _id as the provided pid. This prevents the current course from being included in the related courses.
+        
         const courses = await courseModel.find({
             category : cid,
             _id: {$ne : pid},
-        }).select("-photo").limit(3).populate("category");
+        }).select("-photo").limit(3).populate("category").populate("instructor");
         res.status(200).send({
             success:true,
             courses,

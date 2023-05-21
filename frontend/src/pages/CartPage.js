@@ -2,7 +2,7 @@ import React from 'react'
 import Layout from './../components/Layout/Layout'
 import { useCart } from '../context/cart'
 import { useAuthContext  } from '../context/auth'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 
 const CartPage = () => {
@@ -52,14 +52,18 @@ const CartPage = () => {
                 <div className='col-md-9'>
                     <div className="d-flex flex-wrap">
                         {cart?.map((c) => (
+
                                 <div className="card m-2" style={{width: '18rem'}} key={c._id}>
+                                <Link key={c._id} to={`/course/${c.slug}`} className='course-link'>
                                 <img src={`/api/course/course-photo/${c._id}`} className="card-img-top" alt={c.name} />
                                 <div className="card-body">
                                     <h5 className="card-title">{c.name}</h5>
                                     <span className="card-title">{c.instructor.instructorName}</span>
                                     <p className="card-text"><strong> ₹{c.price}</strong></p>
-                                    <button className='btn btn-danger' onClick={() => removeCartItem(c._id)}>Remove</button>
                                 </div>
+                                
+                              </Link>
+                                    <button className='btn btn-danger' onClick={() => removeCartItem(c._id)}>Remove</button>
                                 </div>
                             ))
                         }
