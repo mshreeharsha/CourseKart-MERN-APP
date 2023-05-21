@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import UserMenu from "../../components/Layout/UserMenu";
 import Layout from "./../../components/Layout/Layout";
 import axios from "axios";
-import { useAuth } from "../../context/auth";
+import { useAuthContext } from "../../context/auth";
 import moment from "moment";
+import { Link } from "react-router-dom";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
-  const [auth, setAuth] = useAuth();
+  const [auth, setAuth] = useAuthContext();
   const getOrders = async () => {
     try {
       const { data } = await axios.get("/api/users/orders");
@@ -20,6 +21,7 @@ const Orders = () => {
   useEffect(() => {
     if (auth?.token) getOrders();
   }, [auth?.token]);
+  console.log(orders)
   return (
     <Layout title={"Dashboard - User Orders"}>
       <div className="container-fluid p-3 m-3 dashboard">
@@ -40,7 +42,6 @@ const Orders = () => {
                         <th scope="col">Buyer</th>
                         <th scope="col"> date</th>
                         <th scope="col">Payment</th>
-                        <th scope="col">Quantity</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -50,28 +51,22 @@ const Orders = () => {
                         <td>{o?.buyer?.name}</td>
                         <td>{moment(o?.createAt).fromNow()}</td>
                         <td>{o?.payment.success ? "Success" : "Failed"}</td>
-                        <td>{o?.courses?.length}</td>
                       </tr>
                     </tbody>
                   </table>
                   <div className="container">
-                    {o?.products?.map((p, i) => (
-                      <div className="row mb-2 p-3 card flex-row" key={p._id}>
-                        <div className="col-md-4">
-                          <img
-                            src={`/api/course/course-photo/${p._id}`}
-                            className="card-img-top"
-                            alt={p.name}
-                            width="100px"
-                            height={"100px"}
-                          />
-                        </div>
-                        <div className="col-md-8">
-                          <p>{p.name}</p>
-                          <p>{p.description.substring(0, 30)}</p>
-                          <p>Price : {p.price}</p>
-                        </div>
+                    {o?.courses?.map((c,i) => (
+                      <div className="card m-2" style={{width: '18rem'}} key={i}>
+                      <Link key={c._id} to={`/course/${c.slug}`} className='course-link'>
+                      <img src={`/api/course/course-photo/${c._id}`} className="card-img-top" alt={c.name} />
+                      <div className="card-body">
+                          <h5 className="card-title">{c.name}</h5>
+                          <span className="card-title">{c.instructor.instructorName}</span>
+                          <p className="card-text"><strong> ₹{c.price}</strong></p>
                       </div>
+                      
+                    </Link>
+                    </div>
                     ))}
                   </div>
                 </div>

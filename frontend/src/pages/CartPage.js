@@ -3,20 +3,15 @@ import Layout from './../components/Layout/Layout';
 import { useCart } from '../context/cart';
 import { useAuthContext  } from '../context/auth';
 import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-hot-toast';
 import DropIn from "braintree-web-drop-in-react";
-import { AiFillWarning } from "react-icons/ai";
 import axios from "axios";
 import toast from "react-hot-toast";
-import "../styles/CartStyles.css";
-
-
 
 
 const CartPage = () => {
     const [cart,setCart] = useCart([]);
     const [auth,setAuth] = useAuthContext();
-    const [clientToken, setClientToken] = useState("");
+    const [clientToken, setClientToken] = useState("")
     const [instance, setInstance] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate  = useNavigate();
@@ -82,16 +77,13 @@ const CartPage = () => {
       setLoading(false);
       localStorage.removeItem("cart");
       setCart([]);
-      navigate("/dashboard/users/orders");
+      navigate("/dashboard/user/orders");
       toast.success("Payment Completed Successfully ");
     } catch (error) {
       console.log(error);
       setLoading(false);
     }
   };
-
-
-
 
     return (
     <Layout>
@@ -138,23 +130,7 @@ const CartPage = () => {
                     <h4>Total : {totalPrice()} </h4>
                     {auth?.user?(
                     <>
-
-                    </>
-                ) : (
-                <button
-                      className="btn btn-outline-warning"
-                      onClick={() =>
-                        navigate("/login", {
-                          state: "/cart",
-                        })
-                      }
-                    >
-                      Please Login to checkout
-                    </button>
-                    )}
-                </div>
-                <div className="mt-2">
-                {!clientToken || !auth?.token || !cart?.length ? (
+                        {!clientToken || !auth?.token || !cart?.length ? (
                   ""
                 ) : (
                   <>
@@ -177,6 +153,22 @@ const CartPage = () => {
                     </button>
                   </>
                 )}
+                    </>
+                ) : (
+                <button
+                      className="btn btn-outline-warning"
+                      onClick={() =>
+                        navigate("/login", {
+                          state: "/cart",
+                        })
+                      }
+                    >
+                      Please Login to checkout
+                    </button>
+                    )}
+                </div>
+                <div className="mt-2">
+                
                 </div>
             </div>
         </div>

@@ -4,10 +4,8 @@ const instructorModel = require('../models/instructor');
 const orderModel = require('../models/orderModel');
 const slugify=require('slugify');
 
-import fs from "fs";
-import braintree from "braintree";
-import dotenv from "dotenv";
-import orderModel from "../models/orderModel";
+const braintree = require("braintree")
+const dotenv = require("dotenv")
 
 dotenv.config();
 //payment gateway
@@ -407,7 +405,7 @@ const relatedCourseController = async(req,res) => {
 
 //payment gateway api
 //token
-export const braintreeTokenController = async (req, res) => {
+const braintreeTokenController = async (req, res) => {
     try {
       gateway.clientToken.generate({}, function (err, response) {
         if (err) {
@@ -422,7 +420,7 @@ export const braintreeTokenController = async (req, res) => {
   };
   
   //payment
-  export const brainTreePaymentController = async (req, res) => {
+const brainTreePaymentController = async (req, res) => {
     try {
       const { nonce, cart } = req.body;
       let total = 0;
@@ -440,7 +438,7 @@ export const braintreeTokenController = async (req, res) => {
         function (error, result) {
           if (result) {
             const order = new orderModel({
-              products: cart,
+              courses: cart,
               payment: result,
               buyer: req.user._id,
             }).save();
@@ -458,4 +456,4 @@ export const braintreeTokenController = async (req, res) => {
 module.exports={createCourseController,getCourseController,
     getSingleCourseController,getPhotoController,
     deleteCourseController,updateCourseController,courseFilterController,
-courseCountController,courseListController,searchCourseController,relatedCourseController};
+courseCountController,courseListController,searchCourseController,relatedCourseController,braintreeTokenController,brainTreePaymentController};
