@@ -12,7 +12,6 @@ const CourseDetails = () => {
     const params=useParams()
 
     const [course,setCourse]=useState({})
-    const [inst,setInstructor]=useState({})
 
     const [cart,setCart] = useCart([])
     const[relCourses,setRelCourses] = useState([])
@@ -67,10 +66,26 @@ const CourseDetails = () => {
                         </strong>
                     </h3>
                 </div>
+                
+                            
             </div>
             <div className="col-mt-3" 
             style={{ marginLeft: '20px',maxWidth:'70%' }}>
-                <h2>Description</h2>
+                <div className='d-flex flex-row'>
+                    <div style={{marginRight:'20px'}}><h2>Description</h2></div>
+                    <div className='text-center' style={{marginLeft:'20px'}}>
+                        {cart.filter(item=>item._id===course._id).length===0?
+                            (<button className='btn btn-warning'
+                                onClick={() => {
+                                setCart([...cart,course])
+                                localStorage.setItem('cart',JSON.stringify([...cart,course]))
+                                toast.success('Item Added to Cart')
+                                navigate('/cart')
+                                }}>
+                                Add to Cart
+                                </button>):(<button className='btn btn-outline-secondary' onClick={()=>navigate('/cart')}>Go To Cart</button>)}
+                    </div>
+                </div>
                 <div><p style={{fontSize:'18px'}}>{course.description}</p></div>
             </div>
         </div>
