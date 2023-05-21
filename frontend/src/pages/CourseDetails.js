@@ -3,7 +3,9 @@ import Layout from '../components/Layout/Layout'
 import { useState,useEffect } from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
-
+import { Link, useNavigate } from 'react-router-dom'
+import { useCart } from '../context/cart'
+import { toast } from 'react-hot-toast'
 const CourseDetails = () => {
 
     //to obtain Slug from the URL
@@ -11,7 +13,9 @@ const CourseDetails = () => {
 
     const [course,setCourse]=useState({})
 
+    const [cart,setCart] = useCart([])
     const[relCourses,setRelCourses] = useState([])
+    const navigate= useNavigate()
     //Get Course
     const getCourse = async()=>{
         try {
@@ -111,7 +115,33 @@ const CourseDetails = () => {
         </div>
         <div className="container" style={{marginTop:'50px',maxWidth:'70%'}}>
             <h1>Similar Products</h1>
-            {JSON.stringify(relCourses,null,4)}
+             <div className="d-flex flex-row">
+              {relCourses.map((c)=>(
+                        
+                            <div className="card m-2" style={{width: '18rem'}} key={c._id}>
+                                <Link key={c._id} to={`/course/${c.slug}`} className='course-link'>
+                                <img src={`/api/course/course-photo/${c._id}`} className="card-img-top" alt={c.name} />
+                                <div className="card-body">
+                                    <h5 className="card-title">{c.name}</h5>
+                                    <span className="card-title">{c.instructor.instructorName}</span>
+                                    <p className="card-text"><strong> ₹{c.price}</strong></p>
+                                </div>
+                                
+                              </Link>
+                              {cart.filter(item=>item._id===c._id).length===0?
+                                (<button className='btn btn-outline-secondary'
+                                     onClick={() => {
+                                       setCart([...cart,c])
+                                       localStorage.setItem('cart',JSON.stringify([...cart,c]))
+                                       toast.success('Item Added to Cart')
+                                       navigate('/cart')
+                                      }}>
+
+                                      Add to Cart
+                                    </button>):(<button className='btn btn-outline-secondary' onClick={()=>navigate('/cart')}>Go To Cart</button>)}
+                            </div>
+                    ))}
+          </div>
         </div>
     </Layout>
   )
