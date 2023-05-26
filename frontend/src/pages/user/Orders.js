@@ -4,9 +4,10 @@ import Layout from "./../../components/Layout/Layout";
 import axios from "axios";
 import { useAuthContext } from "../../context/auth";
 import moment from "moment";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 
 const Orders = () => {
+  const navigate=useNavigate()
   const [orders, setOrders] = useState([]);
   const [auth, setAuth] = useAuthContext();
   const getOrders = async () => {
@@ -54,9 +55,9 @@ const Orders = () => {
                       </tr>
                     </tbody>
                   </table>
-                  <div className="container">
+                  <div className="d-flex flex-row">
                     {o?.courses?.map((c,i) => (
-                      <div className="card m-2" style={{width: '18rem'}} key={i}>
+                      <div className="card m-2" style={{width: '18rem',display:'inline-block'}} key={i}>
                       <Link key={c._id} to={`/course/${c.slug}`} className='course-link'>
                       <img src={`/api/course/course-photo/${c._id}`} className="card-img-top" alt={c.name} />
                       <div className="card-body">
@@ -64,8 +65,15 @@ const Orders = () => {
                           <span className="card-title">{c.instructor.instructorName}</span>
                           <p className="card-text"><strong> ₹{c.price}</strong></p>
                       </div>
-                      
                     </Link>
+                      {o.status === "Unlocked"?(<div className="border border-info-subtle border-4 p-2 mb-2" style={{maxHeight:'30vh'}}>
+                        <p>The Course Is <strong>Unlocked Now</strong></p>
+                        <p>U can Access the Contents</p>
+                        <button className="btn btn-warning"
+                        onClick={()=>{
+                          navigate(`/dashboard/user/UnlockedCourses/${c.slug}`)
+                        }}>Access the Contents</button>
+                      </div>):<></>}
                     </div>
                     ))}
                   </div>
