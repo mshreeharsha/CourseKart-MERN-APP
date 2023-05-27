@@ -28,6 +28,7 @@ import { Toaster } from 'react-hot-toast';
 import CartPage from './pages/CartPage';
 import Search from './pages/Search';
 import CourseDetails from './pages/CourseDetails';
+import UnlockedCourse from './pages/UnlockedCourse';
 
 
 
@@ -44,6 +45,7 @@ function App() {
           <Route path='user' element = {<Dashboard/>}/>
           <Route path='user/profile' element={<Profile/>}/>
           <Route path='user/orders' element={<Orders/>}/>
+          <Route path='user/UnlockedCourses/:slug' element={<UnlockedCourse/>}/>
       </Route>
       <Route path='/dashboard' element={<AdminRoute/>}>
         <Route path='admin' element = {<AdminDashboard/>}/>

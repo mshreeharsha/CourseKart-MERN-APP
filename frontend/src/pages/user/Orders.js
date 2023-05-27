@@ -9,7 +9,7 @@ import { Link,useNavigate } from "react-router-dom";
 const Orders = () => {
   const navigate=useNavigate()
   const [orders, setOrders] = useState([]);
-  const [auth, setAuth] = useAuthContext();
+  const [auth] = useAuthContext();
   const getOrders = async () => {
     try {
       const { data } = await axios.get("/api/users/orders");
@@ -57,7 +57,7 @@ const Orders = () => {
                   </table>
                   <div className="d-flex flex-row">
                     {o?.courses?.map((c,i) => (
-                      <div className="card m-2" style={{width: '18rem',display:'inline-block'}} key={i}>
+                      <div className="card m-2" style={{width: '18rem'}} key={i}>
                       <Link key={c._id} to={`/course/${c.slug}`} className='course-link'>
                       <img src={`/api/course/course-photo/${c._id}`} className="card-img-top" alt={c.name} />
                       <div className="card-body">
@@ -73,7 +73,13 @@ const Orders = () => {
                         onClick={()=>{
                           navigate(`/dashboard/user/UnlockedCourses/${c.slug}`)
                         }}>Access the Contents</button>
-                      </div>):<></>}
+                      </div>):o.status === "cancel"?(<div className="border border-info-subtle border-4 p-2 mb-2" style={{maxHeight:'30vh'}}>
+                      <p>The Course Is <strong>Cancelled due to some Reasons</strong></p>
+                      <p>Amount will be Refunded Back Soon</p>
+                    </div>):(<div className="border border-info-subtle border-4 p-2 mb-2" style={{maxHeight:'30vh'}}>
+                        <p>The Course Is <strong>Not Yet Unlocked</strong></p>
+                        <p>It will be Accessible in Few Days</p>
+                      </div>)}
                     </div>
                     ))}
                   </div>
