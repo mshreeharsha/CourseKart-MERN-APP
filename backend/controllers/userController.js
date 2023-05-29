@@ -1,7 +1,7 @@
 
 const User=require('../models/userModel');
 const jwt=require('jsonwebtoken');
-const Order=require('../models/orderModel');
+const orderModel=require('../models/orderModel');
 
 
 //Function to Generate Json Web Token
@@ -136,7 +136,7 @@ const updateProfileController = async(req,res)=>{
 
 const getOrdersController = async (req,res)=>{
     try{
-        const orders = await Order.
+        const orders = await orderModel.
         find({buyer:req.user._id})
         .populate("courses","-photo")
         .populate("buyer","name");
@@ -156,7 +156,7 @@ const getOrdersController = async (req,res)=>{
 
 const getAllOrdersController = async (req,res)=>{
     try{
-        const orders = await Order
+        const orders = await orderModel
         .find({})
         .populate("courses","-photo")
         .populate("buyer","name")

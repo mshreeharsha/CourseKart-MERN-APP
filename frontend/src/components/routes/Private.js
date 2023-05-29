@@ -1,31 +1,53 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useAuthContext } from "../../context/auth";
-
-//Outlet will Help to create Sub routes within Routes
-import { Outlet } from "react-router-dom";
-
+import { Outlet, useParams } from "react-router-dom";
 import axios from "axios";
 import Spinner from "../Spinner";
 
+export default function PrivateRoute() {
+  const params = useParams();
+  const [ok, setOk] = useState(false);
+  const [ok2, setOk2] = useState(false);
+  const [auth] = useAuthContext();
 
-export default function PrivateRoute(){
-    const[ok,setOk] = useState(false)
-    const[auth] = useAuthContext()
-
-    useEffect(()=> {
-        const authCheck = async() => {
-            const res  = await axios.get('/api/users/user-auth'); 
-            if(res.data.ok)
-            {
-                setOk(true)
-            }
-            else
-            {
-                setOk(false)
-            }
+  useEffect(() => {
+    const authCheck = async () => {
+      try {
+        const res = await axios.get("/api/users/user-auth");
+        if (res.data.ok) {
+          setOk(true);
+          const { data } = await axios.get(`/api/users/orders`);
+          if (data && params.slug !== "") {
+            let hasMatchingCourse = false;
+            data.forEach((o) => {
+              const matchingCourses = o.courses.filter((c) => c.slug === params.slug && o.status==="Unlocked");
+              if (matchingCourses.length > 0) {
+                hasMatchingCourse = true;
+              }
+            });
+            setOk2(hasMatchingCourse);
+          }
+        } else {
+          setOk(false);
         }
-        if(auth?.token) authCheck()
-    },[auth?.token])
+      } catch (error) {
+        console.error(error);
+        setOk(false);
+      }
+    };
 
-    return ok ? <Outlet/>: <Spinner path=''/>
+    if (auth?.token) authCheck();
+  }, [auth?.token, params.slug]);
+
+  return ok ? (
+    params.slug !== "" && ok2 ? (
+      <Outlet />
+    ) : !params.slug ? (
+      <Outlet />
+    ) : (
+      <Spinner path="" />
+    )
+  ) : (
+    <Spinner path="" />
+  );
 }

@@ -33,7 +33,7 @@ router.get("/orders",requireSignIn,getOrdersController);
 // all orders
 router.get("/all-orders",requireSignIn,isAdmin,getAllOrdersController);
 
-//order sattus update
-router.put("/orders-status",requireSignIn,isAdmin,orderStatusController);
+//order status update
+router.put("/orders-status/:orderId",requireSignIn,isAdmin,orderStatusController);
 
 module.exports=router;

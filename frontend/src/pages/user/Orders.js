@@ -4,11 +4,12 @@ import Layout from "./../../components/Layout/Layout";
 import axios from "axios";
 import { useAuthContext } from "../../context/auth";
 import moment from "moment";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 
 const Orders = () => {
+  const navigate=useNavigate()
   const [orders, setOrders] = useState([]);
-  const [auth, setAuth] = useAuthContext();
+  const [auth] = useAuthContext();
   const getOrders = async () => {
     try {
       const { data } = await axios.get("/api/users/orders");
@@ -54,7 +55,7 @@ const Orders = () => {
                       </tr>
                     </tbody>
                   </table>
-                  <div className="container">
+                  <div className="d-flex flex-row">
                     {o?.courses?.map((c,i) => (
                       <div className="card m-2" style={{width: '18rem'}} key={i}>
                       <Link key={c._id} to={`/course/${c.slug}`} className='course-link'>
@@ -64,8 +65,21 @@ const Orders = () => {
                           <span className="card-title">{c.instructor.instructorName}</span>
                           <p className="card-text"><strong> ₹{c.price}</strong></p>
                       </div>
-                      
                     </Link>
+                      {o.status === "Unlocked"?(<div className="border border-info-subtle border-4 p-2 mb-2" style={{maxHeight:'30vh'}}>
+                        <p>The Course Is <strong>Unlocked Now</strong></p>
+                        <p>U can Access the Contents</p>
+                        <button className="btn btn-warning"
+                        onClick={()=>{
+                          navigate(`/dashboard/user/UnlockedCourses/${c.slug}`)
+                        }}>Access the Contents</button>
+                      </div>):o.status === "cancel"?(<div className="border border-info-subtle border-4 p-2 mb-2" style={{maxHeight:'30vh'}}>
+                      <p>The Course Is <strong>Cancelled due to some Reasons</strong></p>
+                      <p>Amount will be Refunded Back Soon</p>
+                    </div>):(<div className="border border-info-subtle border-4 p-2 mb-2" style={{maxHeight:'30vh'}}>
+                        <p>The Course Is <strong>Not Yet Unlocked</strong></p>
+                        <p>It will be Accessible in Few Days</p>
+                      </div>)}
                     </div>
                     ))}
                   </div>

@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import toast from "react-hot-toast";
 import AdminMenu from "../../components/Layout/AdminMenu";
 import Layout from "../../components/Layout/Layout";
-import { useAuth } from "../../context/auth";
+import { useAuthContext } from "../../context/auth";
 import moment from "moment";
 import { Select } from "antd";
+import { useNavigate } from "react-router-dom";
 const { Option } = Select;
 //AdminOrders
 const AdminOrders = () => {
+  const navigate=useNavigate()
   const [status, setStatus] = useState([
     "Not Process",
     "Processing",
     "cancel",
+    "Unlocked"
   ]);
-  const [changeStatus, setCHangeStatus] = useState("");
+  //const [changeStatus, setCHangeStatus] = useState("");
   const [orders, setOrders] = useState([]);
-  const [auth, setAuth] = useAuth();
+  const [auth] = useAuthContext();
   const getOrders = async () => {
     try {
       const { data } = await axios.get("/api/users/all-orders");
@@ -32,10 +34,12 @@ const AdminOrders = () => {
 
   const handleChange = async (orderId, value) => {
     try {
-      const { data } = await axios.put(`/api/users/order-status/${orderId}`, {
+      const { data } = await axios.put(`/api/users/orders-status/${orderId}`, {
         status: value,
       });
-      getOrders();
+      if(data){
+        getOrders();
+      }
     } catch (error) {
       console.log(error);
     }
@@ -85,23 +89,22 @@ const AdminOrders = () => {
                   </tbody>
                 </table>
                 <div className="container">
-                  {o?.products?.map((p, i) => (
-                    <div className="row mb-2 p-3 card flex-row" key={p._id}>
-                      <div className="col-md-4">
-                        <img
-                          src={`/api/course/course-photo/${p._id}`}
-                          className="card-img-top"
-                          alt={p.name}
-                          width="100px"
-                          height={"100px"}
-                        />
+                  {o?.courses?.map((c) => (
+                    
+                      <div className="card m-2" style={{width: '18rem'}} key={c._id} 
+                      onClick={()=>{
+                        navigate(`/dashboard/admin/courses/${c.slug}`)
+                      }}>
+                               
+                                <img src={`/api/course/course-photo/${c._id}`} className="card-img-top" alt={c.name} />
+                                <div className="card-body">
+                                    <h5 className="card-title">{c.name}</h5>
+                                    <span className="card-title">{c.instructor.instructorName}</span>
+                                    <p className="card-text"><strong> ₹{c.price}</strong></p>
+                                </div>
+                                
+                              
                       </div>
-                      <div className="col-md-8">
-                        <p>{p.name}</p>
-                        <p>{p.description.substring(0, 30)}</p>
-                        <p>Price : {p.price}</p>
-                      </div>
-                    </div>
                   ))}
                 </div>
               </div>

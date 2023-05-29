@@ -16,6 +16,7 @@ import CreateCategory from './pages/Admin/CreateCategory';
 import CreateCourse from './pages/Admin/CreateCourse';
 import CreateInstructor from './pages/Admin/CreateInstructor';
 import Users from './pages/Admin/Users';
+import AdminOrders from './pages/Admin/AdminOrders';
 import Courses from './pages/Admin/Courses';
 import UpdateCourse from './pages/Admin/UpdateCourse';
 import UpdatedInstructor from './pages/Admin/UpdatedInstructor';
@@ -27,6 +28,8 @@ import { Toaster } from 'react-hot-toast';
 import CartPage from './pages/CartPage';
 import Search from './pages/Search';
 import CourseDetails from './pages/CourseDetails';
+import UnlockedCourse from './pages/UnlockedCourse';
+
 
 
 function App() {
@@ -42,6 +45,7 @@ function App() {
           <Route path='user' element = {<Dashboard/>}/>
           <Route path='user/profile' element={<Profile/>}/>
           <Route path='user/orders' element={<Orders/>}/>
+          <Route path='user/UnlockedCourses/:slug' element={<UnlockedCourse/>}/>
       </Route>
       <Route path='/dashboard' element={<AdminRoute/>}>
         <Route path='admin' element = {<AdminDashboard/>}/>
@@ -51,6 +55,7 @@ function App() {
         <Route path='admin/instructor/:slug' element={<UpdatedInstructor/>}/>
         <Route path='admin/create-instructor' element={<CreateInstructor/>}/>
         <Route path='admin/users' element={<Users/>}/>
+        <Route path='admin/orders' element={<AdminOrders/>}/>
         <Route path='admin/courses' element={<Courses/>}/>
       </Route>
       <Route path='/register' element = {<Register/>}/>
