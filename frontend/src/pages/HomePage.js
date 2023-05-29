@@ -9,6 +9,7 @@ import {Checkbox,Radio} from 'antd'
 import { Prices } from '../components/Prices'
 import { Pagination } from '../components/CoursePagination'
 import { useCart } from '../context/cart'
+import { useAuthContext } from '../context/auth'
 
 
 const HomePage = () => {
@@ -22,6 +23,24 @@ const HomePage = () => {
   const [loading,setLoading]=useState(false)
   const limit=3
   const navigate= useNavigate()
+  const [auth]=useAuthContext()
+  const [orders,setOrders]=useState([])
+
+  //Get Orders
+  const getAllOrders = async()=>{
+    try {
+        const {data} = await axios.get('/api/users/orders')
+    if(data){
+        setOrders(data)
+    }
+    } catch (error) {
+        console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    if (auth?.token) getAllOrders()
+  }, [auth?.token]);
  
   //Handling Filter by Category
   const handleFilter = async(value,id)=>{
@@ -189,19 +208,60 @@ const HomePage = () => {
                                 </div>
                                 
                               </Link>
-                              {cart.filter(item=>item._id===c._id).length===0?
-                                (<button className='btn btn-outline-secondary'
-                                     onClick={() => {
-                                       setCart([...cart,c])
-                                       localStorage.setItem('cart',JSON.stringify([...cart,c]))
-                                       toast.success('Item Added to Cart')
-                                       navigate('/cart')
-                                      }}>
+                              {orders.map((o) => {
+                              let hasMatch = false;
 
-                                      Add to Cart
-                                    </button>):(<button className='btn btn-outline-secondary' onClick={()=>navigate('/cart')}>Go To Cart</button>)}
-                            </div>
-                    ))}
+                              o.courses.forEach((C) => {
+                              if (C._id === c._id) {
+                                  hasMatch = true;   
+                              }
+                              });
+
+                              if (hasMatch) {
+                              return (
+                                  <button
+                                  key={o._id} // Add a unique key for each button
+                                  className="btn btn-warning"
+                                  onClick={() => {
+                                      navigate(`/dashboard/user/UnlockedCourses/${c.slug}`);
+                                  }}
+                                  >
+                                  Access The Contents
+                                  </button>
+                              );
+                              }
+
+                              return null; // Don't render any buttons for orders without a match
+                          })}
+
+                          {orders.every((o) => {
+                              return !o.courses.some((C) => C._id === c._id);
+                          }) && (
+                              <>
+                              {cart.filter((item) => item._id === c._id).length > 0 ? (
+                                  <button
+                                  className="btn btn-outline-secondary"
+                                  onClick={() => navigate("/cart")}
+                                  >
+                                  Go To Cart
+                                  </button>
+                              ) : (
+                                  <button
+                                  className="btn btn-outline-secondary"
+                                  onClick={() => {
+                                      setCart([...cart, c]);
+                                      localStorage.setItem("cart", JSON.stringify([...cart, c]));
+                                      toast.success("Item Added to Cart");
+                                      navigate("/cart");
+                                  }}
+                                  >
+                                  Add to Cart
+                                  </button>
+                              )}
+                              </>
+                          )}
+                              </div>
+                      ))}
           </div>
           {courses.length > 0?"": <div className="text-center mt-5">
               <h2 className='text-center'>No Courses Available for This Filter</h2>

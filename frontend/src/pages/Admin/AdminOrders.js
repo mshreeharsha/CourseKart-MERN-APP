@@ -10,7 +10,7 @@ const { Option } = Select;
 //AdminOrders
 const AdminOrders = () => {
   const navigate=useNavigate()
-  const [status, setStatus] = useState([
+  const [status] = useState([
     "Not Process",
     "Processing",
     "cancel",
@@ -44,6 +44,7 @@ const AdminOrders = () => {
       console.log(error);
     }
   };
+  console.log(orders)
   return (
     <Layout title={"All Orders Information"}>
       <div className="row dashboard">
@@ -88,7 +89,7 @@ const AdminOrders = () => {
                     </tr>
                   </tbody>
                 </table>
-                <div className="container">
+                <div className="container d-flex flex-row">
                   {o?.courses?.map((c) => (
                     
                       <div className="card m-2" style={{width: '18rem'}} key={c._id} 
@@ -102,8 +103,6 @@ const AdminOrders = () => {
                                     <span className="card-title">{c.instructor.instructorName}</span>
                                     <p className="card-text"><strong> ₹{c.price}</strong></p>
                                 </div>
-                                
-                              
                       </div>
                   ))}
                 </div>

@@ -158,7 +158,14 @@ const getAllOrdersController = async (req,res)=>{
     try{
         const orders = await orderModel
         .find({})
-        .populate("courses","-photo")
+        .populate({
+            path: "courses",
+            populate: {
+              path: "instructor",
+              select: "instructorName"
+            },
+            select: "-photo", 
+          })
         .populate("buyer","name")
         .sort({createdAt:"-1"});
         res.json(orders);
