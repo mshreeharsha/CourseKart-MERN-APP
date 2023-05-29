@@ -22,7 +22,7 @@ const Orders = () => {
   useEffect(() => {
     if (auth?.token) getOrders();
   }, [auth?.token]);
-  console.log(orders)
+  
   return (
     <Layout title={"Dashboard - User Orders"}>
       <div className="container-fluid p-3 m-3 dashboard">

@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom'
 import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../context/cart'
 import { toast } from 'react-hot-toast'
+import { useAuthContext } from '../context/auth'
 const CourseDetails = () => {
 
     //to obtain Slug from the URL
@@ -15,7 +16,21 @@ const CourseDetails = () => {
 
     const [cart,setCart] = useCart([])
     const[relCourses,setRelCourses] = useState([])
+    const[auth] = useAuthContext()
+    const [orders, setOrders] = useState([]);
     const navigate= useNavigate()
+
+    //Get Orders
+    const getAllOrders = async()=>{
+        try {
+            const {data} = await axios.get('/api/users/orders')
+        if(data){
+            setOrders(data)
+        }
+        } catch (error) {
+            console.log(error)
+        }
+    }
     //Get Course
     const getCourse = async()=>{
         try {
@@ -31,10 +46,16 @@ const CourseDetails = () => {
         }
     }
 
+    useEffect(() => {
+        if (auth?.token && params.slug) getAllOrders()
+      }, [auth?.token,params.slug]);
+
     useEffect(()=>{
         if(params.slug){
+            
             getCourse()
         }
+        
         // eslint-disable-next-line
     },[params.slug])
 
@@ -73,18 +94,62 @@ const CourseDetails = () => {
             style={{ marginLeft: '20px',maxWidth:'70%' }}>
                 <div className='d-flex flex-row'>
                     <div style={{marginRight:'20px'}}><h2>Description</h2></div>
-                    <div className='text-center' style={{marginLeft:'20px'}}>
-                        {cart.filter(item=>item._id===course._id).length===0?
-                            (<button className='btn btn-warning'
+                    <div className="text-center" style={{ marginLeft: "20px" }}>
+                        {orders.map((o) => {
+                            let hasMatch = false;
+
+                            o.courses.forEach((c) => {
+                            if (c._id === course._id) {
+                                hasMatch = true;   
+                            }
+                            });
+
+                            if (hasMatch) {
+                            return (
+                                <button
+                                key={o._id} // Add a unique key for each button
+                                className="btn btn-warning"
                                 onClick={() => {
-                                setCart([...cart,course])
-                                localStorage.setItem('cart',JSON.stringify([...cart,course]))
-                                toast.success('Item Added to Cart')
-                                navigate('/cart')
-                                }}>
+                                    navigate(`/dashboard/user/UnlockedCourses/${course.slug}`);
+                                }}
+                                >
+                                Access The Contents
+                                </button>
+                            );
+                            }
+
+                            return null; // Don't render any buttons for orders without a match
+                        })}
+
+                        {orders.every((o) => {
+                            return !o.courses.some((c) => c._id === course._id);
+                        }) && (
+                            <>
+                            {cart.filter((item) => item._id === course._id).length > 0 ? (
+                                <button
+                                className="btn btn-outline-secondary"
+                                onClick={() => navigate("/cart")}
+                                >
+                                Go To Cart
+                                </button>
+                            ) : (
+                                <button
+                                className="btn btn-warning"
+                                onClick={() => {
+                                    setCart([...cart, course]);
+                                    localStorage.setItem("cart", JSON.stringify([...cart, course]));
+                                    toast.success("Item Added to Cart");
+                                    navigate("/cart");
+                                }}
+                                >
                                 Add to Cart
-                                </button>):(<button className='btn btn-outline-secondary' onClick={()=>navigate('/cart')}>Go To Cart</button>)}
-                    </div>
+                                </button>
+                            )}
+                            </>
+                        )}
+                        </div>
+
+
                 </div>
                 <div><p style={{fontSize:'18px'}}>{course.description}</p></div>
             </div>

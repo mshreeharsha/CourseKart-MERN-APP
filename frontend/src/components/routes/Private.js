@@ -3,6 +3,7 @@ import { useAuthContext } from "../../context/auth";
 import { Outlet, useParams } from "react-router-dom";
 import axios from "axios";
 import Spinner from "../Spinner";
+import { toast } from "react-hot-toast";
 
 export default function PrivateRoute() {
   const params = useParams();
@@ -23,6 +24,10 @@ export default function PrivateRoute() {
               const matchingCourses = o.courses.filter((c) => c.slug === params.slug && o.status==="Unlocked");
               if (matchingCourses.length > 0) {
                 hasMatchingCourse = true;
+              }
+              const matchingCourses2 = o.courses.filter((c) => c.slug === params.slug && o.status!=="Unlocked");
+              if (matchingCourses2.length > 0) {
+                toast.error('The Course is Yet Not Unlocked!! Please Wait for Few days')
               }
             });
             setOk2(hasMatchingCourse);
