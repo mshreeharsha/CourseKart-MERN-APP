@@ -198,7 +198,7 @@ const HomePage = () => {
           <div className="d-flex flex-row">
               {courses.map((c)=>(
                         
-                            <div className="card m-2" style={{width: '18rem'}} key={c._id}>
+                            <div className="card m-2" style={{width: '18rem',backgroundColor:'#FFF8E1'}} key={c._id}>
                                 <Link key={c._id} to={`/course/${c.slug}`} className='course-link'>
                                 <img src={`/api/course/course-photo/${c._id}`} className="card-img-top" alt={c.name} />
                                 <div className="card-body">
@@ -218,8 +218,9 @@ const HomePage = () => {
                               });
 
                               if (hasMatch) {
-                              return (
-                                  <button
+                                return (
+                                  <div>
+                                  {o.status==="Unlocked" ? <button
                                   key={o._id} // Add a unique key for each button
                                   className="btn btn-warning"
                                   onClick={() => {
@@ -227,7 +228,16 @@ const HomePage = () => {
                                   }}
                                   >
                                   Access The Contents
-                                  </button>
+                                  </button>:<button
+                                  key={o._id} // Add a unique key for each button
+                                  className="btn btn-warning"
+                                  onClick={() => {
+                                      
+                                  }}
+                                  >
+                                  Cancel Order
+                                  </button>}
+                                  </div>
                               );
                               }
 

@@ -6,7 +6,7 @@ import {Helmet} from 'react-helmet'
 
 const Layout = ({children,title}) => {
   return (
-    <div>
+    <div style={{backgroundColor:'#ECF8F9'}}>
       <Helmet>
         <title>{title}</title>
       </Helmet>

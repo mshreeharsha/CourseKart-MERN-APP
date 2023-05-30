@@ -106,7 +106,8 @@ const CourseDetails = () => {
 
                             if (hasMatch) {
                             return (
-                                <button
+                                <div>
+                                {o.status!=="Unlocked" ? <button
                                 key={o._id} // Add a unique key for each button
                                 className="btn btn-warning"
                                 onClick={() => {
@@ -114,7 +115,16 @@ const CourseDetails = () => {
                                 }}
                                 >
                                 Access The Contents
-                                </button>
+                                </button>:<button
+                                key={o._id} // Add a unique key for each button
+                                className="btn btn-warning"
+                                onClick={() => {
+                                    
+                                }}
+                                >
+                                Cancel Order
+                                </button>}
+                                </div>
                             );
                             }
 
