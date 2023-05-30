@@ -21,7 +21,13 @@ const userSchema= new Schema({
     },
     phone:{
         type:String,
-        required:true
+        required:true,
+        validate: {
+            validator: function(v) {
+              return /^\d{10}$/.test(v); // validate if phone number is 10 digits
+            },
+            message: props => `${props.value} is not a valid phone number!`
+        }
     },
     address:{
         type:{},

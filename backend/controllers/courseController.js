@@ -131,6 +131,7 @@ const getCourseController = async(req,res)=>{
 
 const getSingleCourseController = async(req,res)=>{
     try {
+        console.log(req.params.slug)
         const course = await courseModel.findOne({slug:req.params.slug}).select("-photo")
         .populate('category').populate('instructor');
 
