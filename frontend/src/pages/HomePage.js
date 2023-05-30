@@ -148,7 +148,7 @@ const HomePage = () => {
 
   const filterCourses = async()=>{
     try {
-      const {data}= await axios.post('/api/course/course-filter',{checked,radio})
+      const {data} = await axios.post('/api/course/course-filter',{checked,radio})
 
       if(data?.success){
         console.log(data.courses)
@@ -195,6 +195,7 @@ const HomePage = () => {
         </div>
         <div className="col-md-9">
           <h1 className='text-center'>Courses</h1>
+          <p className='totalCourse'>{checked.length===0 && radio.length===0?"":`Total No of Courses ${total}`}</p>
           <div className="d-flex flex-row">
               {courses.map((c)=>(
                         
