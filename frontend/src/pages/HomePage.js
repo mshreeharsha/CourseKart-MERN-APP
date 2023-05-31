@@ -36,7 +36,7 @@ const HomePage = () => {
       const {data}=await axios.patch(`/api/course/cancel-order/${id}`)
       if(data.ok){
         toast.success('Order Cancelled Successfully!! Amount will be Refunded Soon!!')
-        navigate('/dashboard/user/orders')
+        window.location.reload();
       }
     } catch (error) {
       console.log(error)
@@ -231,14 +231,17 @@ const HomePage = () => {
 
                               o.courses.forEach((C) => {
                               if (C._id === c._id) {
+                                if(o.cancelled!==1){
                                   hasMatch = true;   
+                                }
+                                 
                               }
                               });
 
                               if (hasMatch) {
                                 return (
                                   <div>
-                                  {o.status==="Unlocked" ? <button
+                                  {o.cancelled!==1 && o.status==="Unlocked" ? <button
                                   key={o._id} // Add a unique key for each button
                                   className="btn btn-warning"
                                   onClick={() => {
@@ -263,7 +266,7 @@ const HomePage = () => {
                           })}
 
                           {orders.every((o) => {
-                              return !o.courses.some((C) => C._id === c._id);
+                              return !o.courses.some((C) => C._id === c._id) || o.cancelled===1;
                           }) && (
                               <>
                               {cart.filter((item) => item._id === c._id).length > 0 ? (
