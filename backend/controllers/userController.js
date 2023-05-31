@@ -2,6 +2,7 @@
 const User=require('../models/userModel');
 const jwt=require('jsonwebtoken');
 const orderModel=require('../models/orderModel');
+const userModel = require('../models/userModel');
 
 
 //Function to Generate Json Web Token
@@ -132,6 +133,25 @@ const updateProfileController = async(req,res)=>{
     }
 };
 
+//Get All Users
+
+const getAllUsersController = async(req,res)=>{
+    try {
+        const users= await userModel.find({role:0})
+        res.status(200).send({
+            success:true,
+            message:'All Users Fetched',
+            users
+        })
+    } catch (error) {
+        res.status(400).send({
+            success:false,
+            message:'Error in Fetching All Users',
+            error
+        })
+    }
+}
+
 //orders
 
 const getOrdersController = async (req,res)=>{
@@ -201,4 +221,4 @@ const orderStatusController = async (req, res) => {
   };
 
 
-module.exports={registerController,loginController,updateProfileController,getOrdersController,getAllOrdersController,orderStatusController};
+module.exports={registerController,loginController,updateProfileController,getOrdersController,getAllOrdersController,orderStatusController,getAllUsersController};

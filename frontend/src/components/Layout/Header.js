@@ -41,9 +41,7 @@ const Header = () => {
         <li className="nav-item">
           <NavLink to='/' className="nav-link" aria-current="page" href="#">Home</NavLink>
         </li>
-
         
-
         {!auth.user?(<><li className="nav-item">
           <NavLink to='/register' className="nav-link" href="#">SignUp</NavLink>
         </li>
@@ -52,7 +50,7 @@ const Header = () => {
         </li></>):(<>
           <li className="nav-item dropdown">
 
-          <NavLink href="#" className="nav-link dropdown-toggle"        data-bs-toggle="dropdown" aria-expanded="false">
+          <NavLink href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
             {auth?.user?.name}
           </NavLink>
 
@@ -65,11 +63,10 @@ const Header = () => {
           </ul>
         </li></>)}
         <li className="nav-item">
-        <Badge count={cart?.length} showZero>
-          <NavLink to='/cart' className="nav-link" href="#">Cart </NavLink>
-        </Badge>
+            <Badge count={cart?.length} showZero>
+              <NavLink to='/cart' className="nav-link" href="#">Cart</NavLink>
+            </Badge>
         </li>
-        
       </ul>
       
     </div>
