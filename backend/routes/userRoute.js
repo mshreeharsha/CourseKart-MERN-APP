@@ -1,5 +1,5 @@
 const express=require('express');
-const {registerController,loginController,updateProfileController, getOrdersController, getAllOrdersController,orderStatusController} =require('../controllers/userController');
+const {registerController,loginController,updateProfileController, getOrdersController, getAllOrdersController,orderStatusController,getAllUsersController} =require('../controllers/userController');
 const router=express.Router();
 
 //Authorization
@@ -26,6 +26,9 @@ router.get('/admin-auth',requireSignIn,isAdmin,(req,res)=>{
 
 //update profile
 router.put("/profile",requireSignIn,updateProfileController);
+
+//get all users
+router.get("/all-users",requireSignIn,isAdmin,getAllUsersController)
 
 //orders
 router.get("/orders",requireSignIn,getOrdersController);
