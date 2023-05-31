@@ -110,7 +110,7 @@ const getCourseController = async(req,res)=>{
         //Not Loading the photo while Fetching the Courses
         //Adding a Limit and Displaying only recent 10 Courses
         const courses= await courseModel.find({}).populate('category').populate('instructor')
-        .select("-photo").limit(10).sort({createdAt:-1});
+        .select("-photo").sort({createdAt:-1});
 
         console.log(courses);
         res.status(200).send({
