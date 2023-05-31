@@ -216,7 +216,7 @@ const HomePage = () => {
           <div className="d-flex flex-row">
               {courses.map((c)=>(
                         
-                            <div className="card m-2" style={{width: '18rem',backgroundColor:'#FFF8E1'}} key={c._id}>
+                            <div className="card m-2" style={{width: '18rem'}} key={c._id}>
                                 <Link key={c._id} to={`/course/${c.slug}`} className='course-link'>
                                 <img src={`/api/course/course-photo/${c._id}`} className="card-img-top" alt={c.name} />
                                 <div className="card-body">
