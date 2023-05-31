@@ -14,13 +14,18 @@ const About = () => {
         </div>
         <div className="col-md-4">
           <p className="text-justify mt-2">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus
-            officiis obcaecati esse tempore unde ratione, eveniet mollitia,
-            perferendis eius temporibus dicta blanditiis doloremque explicabo
-            quasi sunt vero optio cum aperiam vel consectetur! Laborum enim
-            accusantium atque, excepturi sapiente amet! Tenetur ducimus aut
-            commodi illum quidem neque tempora nam.
+          <p>Welcome to our course cart website, the ultimate destination for knowledge seekers and lifelong learners! We are passionate about empowering individuals like you to unlock their full potential through the power of education.
           </p>
+          <p>
+          At our website, we have curated a vast collection of high-quality courses spanning a wide range of subjects and disciplines. Whether you are looking to acquire new skills, enhance your existing knowledge, or explore a completely new field, we have got you covered.
+          </p>
+          <p>
+          Our team consists of dedicated experts and professionals who are deeply committed to providing you with an enriching learning experience. We meticulously select each course, ensuring that they meet our rigorous standards of quality, relevance, and effectiveness. We collaborate with renowned instructors and industry experts who possess a wealth of practical experience and a passion for teaching.
+          </p>
+          <p>
+          So, embark on your educational journey with us and discover a world of knowledge at your fingertips. Start exploring our course cart today and let us be your trusted companion in your pursuit of lifelong learning.       
+          </p>
+        </p>
         </div>
       </div>
     </Layout>
