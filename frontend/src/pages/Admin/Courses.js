@@ -23,7 +23,7 @@ const Courses = () => {
     useEffect(()=>{
         getAllCourses();
     },[])
-    
+    console.log(course.length)
   return (
     <Layout title={"Dashboard - All Courses"}>
         <div className="row">

@@ -77,7 +77,7 @@ const CartPage = () => {
       setLoading(false);
       localStorage.removeItem("cart");
       setCart([]);
-      navigate("/dashboard/user/orders");
+      navigate(`/dashboard/${auth.user.role === 1 ? 'admin' : 'user'}/orders`);
       toast.success("Payment Completed Successfully ");
     } catch (error) {
       console.log(error);
