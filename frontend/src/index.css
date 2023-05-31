@@ -167,3 +167,9 @@
 .card-img-top {
   height:150px; 
 }
+
+.custom-dropdown-toggle {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 10px;
+}

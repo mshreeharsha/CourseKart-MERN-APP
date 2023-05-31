@@ -3,8 +3,9 @@ import UserMenu from "../../components/Layout/UserMenu";
 import Layout from "./../../components/Layout/Layout";
 import axios from "axios";
 import { useAuthContext } from "../../context/auth";
-import moment from "moment";
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { Link,useNavigate } from "react-router-dom";
+import moment from "moment";
 
 const Orders = () => {
   const navigate=useNavigate()
@@ -51,7 +52,7 @@ const Orders = () => {
                         <td>{i + 1}</td>
                         <td>{o?.status}</td>
                         <td>{o?.buyer?.name}</td>
-                        <td>{moment(o?.createAt).fromNow()}</td>
+                        <td>{moment(o?.createdAt).fromNow()}</td>
                         <td>{o?.payment.success ? "Success" : "Failed"}</td>
                       </tr>
                     </tbody>
@@ -108,7 +109,7 @@ const Orders = () => {
                         <td>{i + 1}</td>
                         <td>{o?.status}</td>
                         <td>{o?.buyer?.name}</td>
-                        <td>{moment(o?.createAt).fromNow()}</td>
+                        <td>{moment(o?.createdAt).fromNow()}</td>
                         <td>{o?.payment.success ? "Success" : "Failed"}</td>
                       </tr>
                     </tbody>

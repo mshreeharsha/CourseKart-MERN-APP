@@ -15,17 +15,19 @@ const Contact = () => {
         <div className="col-md-4">
           <h1 className="bg-dark p-2 text-white text-center">CONTACT US</h1>
           <p className="text-justify mt-2">
-            any query and info about prodduct feel free to call anytime we 24X7
-            vaialible
+          We value your feedback and are here to assist you with any inquiries or concerns you may have. Please feel free to reach out to us using the contact information provided below. Our dedicated team of customer support representatives is ready to assist you.
+
           </p>
           <p className="mt-3">
-           www.help@ecommerceapp.com
+          Email: shyam@gmail.com
           </p>
           <p className="mt-3">
-           012-3456789
+          Phone: +91 12345 67890
+
           </p>
           <p className="mt-3">
-           1800-0000-0000 (toll free)
+          If you have any specific questions regarding a course or need technical assistance with our website, please visit our FAQ page or submit a support ticket through our online help center. Our team will respond to your inquiries as soon as possible.
+          We appreciate your interest in our course cart website and look forward to serving you on your educational journey. Let's explore the world of knowledge together!
           </p>
         </div>
       </div>
