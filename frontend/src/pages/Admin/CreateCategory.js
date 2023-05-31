@@ -1,54 +1,54 @@
-import React,{useEffect,useState} from 'react'
-import AdminMenu from '../../components/Layout/AdminMenu'
-import Layout from '../../components/Layout/Layout'
-import {toast} from 'react-hot-toast'
-import axios from 'axios'
-import CategoryForm from '../../components/Form/CategoryForm'
-import {} from 'antd'
-import Modal from 'antd/es/modal/Modal'
+import React,{useEffect,useState} from 'react';
+import AdminMenu from '../../components/Layout/AdminMenu';
+import Layout from '../../components/Layout/Layout';
+import {toast} from 'react-hot-toast';
+import axios from 'axios';
+import CategoryForm from '../../components/Form/CategoryForm';
+import {} from 'antd';
+import Modal from 'antd/es/modal/Modal';
 
 const CreateCategory = () => {
   const [categories,setCategories] = useState([]);
-  const [name,setName] = useState("")
-  const [visible , setVisible] = useState(false)
-  const [selected,setSelected] = useState(null)
-  const [updatedName , setUpadatedName] = useState("")
+  const [name,setName] = useState("");
+  const [visible , setVisible] = useState(false);
+  const [selected,setSelected] = useState(null);
+  const [updatedName , setUpadatedName] = useState("");
 
   
   // handle form
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try{
-      const {data} = await axios.post('/api/category/create-category',{name})
+      const {data} = await axios.post('/api/category/create-category',{name});
       if(data?.success)
       {
-        toast.success(`${name} is created`)
-        setName("")
+        toast.success(`${name} is created`);
+        setName("");
         getAllCategory();
       }
       else
       {
-        toast.error(data.message)
+        toast.error(data.message);
       }
     }
     catch(error)
     {
-      console.log(error)
-      toast.error(error.response.data.message)
+      console.log(error);
+      toast.error(error.response.data.message);
     }
   }
 
   // get all categories
   const getAllCategory = async () => {
     try {
-        const {data} = await axios.get('/api/category/get-category')
+        const {data} = await axios.get('/api/category/get-category');
         if(data?.success)
         {
             setCategories(data?.category);
         }
     } catch (error) {
-      console.log(error)
-      toast.error('Something went wrong in getting category')
+      console.log(error);
+      toast.error('Something went wrong in getting category');
     }
   };
 
@@ -59,46 +59,46 @@ const CreateCategory = () => {
 
   // update category
   const handleUpdate = async(e) =>{
-    e.preventDefault()
+    e.preventDefault();
     try{
-      const {data} = await axios.put(`/api/category/update-category/${selected._id}`,{name:updatedName})
+      const {data} = await axios.put(`/api/category/update-category/${selected._id}`,{name:updatedName});
       if(data.success)
       {
-        toast.success(`${updatedName} is updated`)
-        setSelected(null)
-        setUpadatedName("")
-        setVisible(false)
+        toast.success(`${updatedName} is updated`);
+        setSelected(null);
+        setUpadatedName("");
+        setVisible(false);
         getAllCategory();
       }
       else
       {
-        toast.message(data.message)
+        toast.message(data.message);
       }
     }
     catch(error)
     {
-      toast.error('Something went Wrong')
+      toast.error('Something went Wrong');
     }
   };
   // delete category
   const handleDelete = async(pId) =>{
     try{
-      let ans=window.prompt("Do You want To delete this Category?\nThis will Delete all the courses Under this Category")
+      let ans=window.prompt("Do You want To delete this Category?\nThis will Delete all the courses Under this Category");
       if(ans!=="yes")return;
-      const {data} = await axios.delete(`/api/category/delete-category/${pId}`)
+      const {data} = await axios.delete(`/api/category/delete-category/${pId}`);
       if(data.success)
       {
-        toast.success(`category is deleted`)
+        toast.success(`category is deleted`);
         getAllCategory();
       }
       else
       {
-        toast.message(data.message)
+        toast.message(data.message);
       }
     }
     catch(error)
     {
-      toast.error('Something went Wrong')
+      toast.error('Something went Wrong');
     }
   };
   return (
@@ -158,4 +158,4 @@ const CreateCategory = () => {
   )
 }
 
-export default CreateCategory
+export default CreateCategory;

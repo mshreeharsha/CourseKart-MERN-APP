@@ -1,48 +1,48 @@
-import React from 'react'
-import { useState,useEffect } from 'react'
-import AdminMenu from '../../components/Layout/AdminMenu'
-import Layout from '../../components/Layout/Layout'
-import axios from 'axios'
-import { toast } from 'react-hot-toast'
-import InstructorForm from '../../components/Form/InstructorForm'
-import {} from 'antd'
-import InstructorCard from '../../components/Layout/InstructorCard'
-import { Link } from 'react-router-dom'
+import React from 'react';
+import { useState,useEffect } from 'react';
+import AdminMenu from '../../components/Layout/AdminMenu';
+import Layout from '../../components/Layout/Layout';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
+import InstructorForm from '../../components/Form/InstructorForm';
+import {} from 'antd';
+import InstructorCard from '../../components/Layout/InstructorCard';
+import { Link } from 'react-router-dom';
 
 
 const CreateInstructor = () => {
-  const [instructor,setInstructor]=useState([])
-  const [instructorName,setName]=useState('')
-  const [instructorDetails,setDetails]=useState('')
-  const [photo,setPhoto]=useState("")
+  const [instructor,setInstructor]=useState([]);
+  const [instructorName,setName]=useState('');
+  const [instructorDetails,setDetails]=useState('');
+  const [photo,setPhoto]=useState("");
 
 
   //Handle Form SUbmit
 
   const handleSubmit= async(e)=>{
-    e.preventDefault()
+    e.preventDefault();
 
     try {
       const instructorData=new FormData()
-      instructorData.append("instructorName",instructorName)
-      instructorData.append("instructorDetails",instructorDetails)
-      instructorData.append("photo",photo)
-      const {data}= await axios.post('/api/instructor/create-instructor',instructorData)
+      instructorData.append("instructorName",instructorName);
+      instructorData.append("instructorDetails",instructorDetails);
+      instructorData.append("photo",photo);
+      const {data}= await axios.post('/api/instructor/create-instructor',instructorData);
 
       
       if(data?.success){
-        toast.success(`${instructorName} Instructor Added`)
-        setName('')
-        setDetails('')
-        setPhoto('')
-        getAllInstructor()
+        toast.success(`${instructorName} Instructor Added`);
+        setName('');
+        setDetails('');
+        setPhoto('');
+        getAllInstructor();
       }
       else{
-        toast.error(data.message)
+        toast.error(data.message);
       }
     } catch (error) {
-      console.log(error.message)
-      toast.error(error.response.data.message)
+      console.log(error.message);
+      toast.error(error.response.data.message);
     }
   }
 
@@ -50,14 +50,14 @@ const CreateInstructor = () => {
 
   const getAllInstructor = async()=>{
     try {
-      const instructors= await axios.get('/api/instructor/all-instructors')
-      console.log(instructors.data.instructors)
+      const instructors= await axios.get('/api/instructor/all-instructors');
+      console.log(instructors.data.instructors);
       if(instructors.data.success){
-        setInstructor(instructors.data.instructors)
+        setInstructor(instructors.data.instructors);
       }
     } catch (error) {
-      console.log(error)
-      toast.error(error.response.data.message)
+      console.log(error);
+      toast.error(error.response.data.message);
     }
   }
 
@@ -91,4 +91,4 @@ const CreateInstructor = () => {
   )
 }
 
-export default CreateInstructor
+export default CreateInstructor;

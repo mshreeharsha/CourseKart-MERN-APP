@@ -1,27 +1,27 @@
-import React,{useEffect,useState} from 'react'
-import AdminMenu from '../../components/Layout/AdminMenu'
-import Layout from '../../components/Layout/Layout'
-import axios from 'axios'
-import toast from 'react-hot-toast'
-import { Link } from 'react-router-dom'
+import React,{useEffect,useState} from 'react';
+import AdminMenu from '../../components/Layout/AdminMenu';
+import Layout from '../../components/Layout/Layout';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { Link } from 'react-router-dom';
 
 const Courses = () => {
-    const [course,setCourse]=useState([])
+    const [course,setCourse]=useState([]);
 
     const getAllCourses = async()=>{
         try {
-            const {data}= await axios('/api/course/get-course')
+            const {data}= await axios('/api/course/get-course');
             if(data?.success){
-                setCourse(data?.courses)
+                setCourse(data?.courses);
             }
         } catch (error) {
-            console.log(error)
-            toast.error(error.response.data.message)
+            console.log(error);
+            toast.error(error.response.data.message);
         }
     }
 
     useEffect(()=>{
-        getAllCourses()
+        getAllCourses();
     },[])
     
   return (
@@ -52,4 +52,4 @@ const Courses = () => {
   )
 }
 
-export default Courses
+export default Courses;

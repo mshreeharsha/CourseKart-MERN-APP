@@ -1,17 +1,18 @@
 
-const User=require('../models/userModel')
-const jwt=require('jsonwebtoken')
+const User=require('../models/userModel');
+const jwt=require('jsonwebtoken');
+const orderModel=require('../models/orderModel');
 
 
 //Function to Generate Json Web Token
 const createToken=(_id)=>{
-    return jwt.sign({_id},process.env.SECRET,{expiresIn: '3d'})
+    return jwt.sign({_id},process.env.SECRET,{expiresIn: '3d'});
 }
 
 //Register Controller
 const registerController=async(req,res)=>{
-    const {name,email,password,phone,address}=req.body
-    let emptyField=[]
+    const {name,email,password,phone,address}=req.body;
+    let emptyField=[];
     if(!name){
         emptyField.push('name')
     }
@@ -36,9 +37,9 @@ const registerController=async(req,res)=>{
     }
 
     try {
-        const user=await User.register(name,email,password,phone,address)
-        const token=createToken(User._id)
-        console.log(user)
+        const user=await User.register(name,email,password,phone,address);
+        const token=createToken(User._id);
+        console.log(user);
         res.status(200).send({
             success:true,
             message:'User Registered Successfully',
@@ -48,21 +49,21 @@ const registerController=async(req,res)=>{
                 phone: user.phone,
                 address: user.address
             },token
-        })
+        });
         
     } catch (error) {
         res.status(400).send({
             success:false,
             message:error.message,
             error
-        })
+        });
     }
 }
 
 //Login Controller
 
 const loginController = async(req,res)=>{
-    const {email,password}=req.body
+    const {email,password}=req.body;
     if(!email || !password){
         return res.status(400).send({
             success:false,
@@ -71,8 +72,8 @@ const loginController = async(req,res)=>{
     }
 
     try {
-        const user=await User.login(email,password)
-        const token=createToken(user._id)
+        const user=await User.login(email,password);
+        const token=createToken(user._id);
         res.status(200).send({
             success:true,
             message:'User Logged in Successfully',
@@ -85,13 +86,13 @@ const loginController = async(req,res)=>{
                 role: user.role,
             },
             token
-        })
+        });
     } catch (error) {
         res.status(400).send({
             success:false,
             message:error.message,
             error
-        })
+        });
     }
 }
 
@@ -131,4 +132,73 @@ const updateProfileController = async(req,res)=>{
     }
 };
 
-module.exports={registerController,loginController,updateProfileController}
+//orders
+
+const getOrdersController = async (req,res)=>{
+    try{
+        const orders = await orderModel.
+        find({buyer:req.user._id})
+        .populate("courses","-photo")
+        .populate("buyer","name");
+        res.json(orders);
+
+    }catch(error){
+        console.log(error);
+        res.status(500).send({
+            success:false,
+            message:"Error While getting order",
+            error
+        });
+    };
+}
+
+// all orders
+
+const getAllOrdersController = async (req,res)=>{
+    try{
+        const orders = await orderModel
+        .find({})
+        .populate({
+            path: "courses",
+            populate: {
+              path: "instructor",
+              select: "instructorName"
+            },
+            select: "-photo", 
+          })
+        .populate("buyer","name")
+        .sort({createdAt:"-1"});
+        res.json(orders);
+    }catch(error){
+        console.log(error);
+        res.status(500).send({
+            success:false,
+            message:"Error While getting order",
+            error
+        });
+    };
+}
+
+
+const orderStatusController = async (req, res) => {
+    try {
+      const { orderId } = req.params;
+      const { status } = req.body;
+      const orders = await orderModel.findByIdAndUpdate(
+        orderId,
+        { status },
+        { new: true }
+      );
+      res.json(orders);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({
+        success: false,
+        message: "Error While Updating Order",
+        error,
+      });
+    }
+  };
+
+
+module.exports={registerController,loginController,updateProfileController,getOrdersController,getAllOrdersController,orderStatusController};

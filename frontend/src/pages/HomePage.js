@@ -4,14 +4,16 @@ import '../styles/Homepage.css'
 import { useState,useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {Checkbox,Radio} from 'antd'
 import { Prices } from '../components/Prices'
 import { Pagination } from '../components/CoursePagination'
 import { useCart } from '../context/cart'
+import { useAuthContext } from '../context/auth'
+
 
 const HomePage = () => {
-  const [cart,setCart] = useCart()
+  const [cart,setCart] = useCart([])
   const [courses,setCourses]=useState([])
   const [categories,setCategories]=useState([])
   const [checked,setChecked]=useState([])
@@ -20,6 +22,42 @@ const HomePage = () => {
   const [page,setPage]=useState(1)
   const [loading,setLoading]=useState(false)
   const limit=3
+  const navigate= useNavigate()
+  const [auth]=useAuthContext()
+  const [orders,setOrders]=useState([])
+
+
+  //Cancel Order
+  const deleteOrder= async(id)=>{
+    //Alert
+    let answer=window.prompt("Do You Want to Cancel The Order?");
+    if(answer!=="yes")return;
+    try {
+      const {data}=await axios.patch(`/api/course/cancel-order/${id}`)
+      if(data.ok){
+        toast.success('Order Cancelled Successfully!! Amount will be Refunded Soon!!')
+        navigate('/dashboard/user/orders')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  } 
+
+  //Get Orders
+  const getAllOrders = async()=>{
+    try {
+        const {data} = await axios.get('/api/users/orders')
+    if(data){
+        setOrders(data)
+    }
+    } catch (error) {
+        console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    if (auth?.token) getAllOrders()
+  }, [auth?.token]);
  
   //Handling Filter by Category
   const handleFilter = async(value,id)=>{
@@ -127,7 +165,7 @@ const HomePage = () => {
 
   const filterCourses = async()=>{
     try {
-      const {data}= await axios.post('/api/course/course-filter',{checked,radio})
+      const {data} = await axios.post('/api/course/course-filter',{checked,radio})
 
       if(data?.success){
         console.log(data.courses)
@@ -174,27 +212,84 @@ const HomePage = () => {
         </div>
         <div className="col-md-9">
           <h1 className='text-center'>Courses</h1>
-          <div className="d-flex flex-wrap">
+          <p className='totalCourse'>{checked.length===0 && radio.length===0?"":`Total No of Courses ${total}`}</p>
+          <div className="d-flex flex-row">
               {courses.map((c)=>(
-                        <Link key={c._id} to={`${c.slug}`} className='course-link'>
+                        
                             <div className="card m-2" style={{width: '18rem'}} key={c._id}>
+                                <Link key={c._id} to={`/course/${c.slug}`} className='course-link'>
                                 <img src={`/api/course/course-photo/${c._id}`} className="card-img-top" alt={c.name} />
                                 <div className="card-body">
                                     <h5 className="card-title">{c.name}</h5>
                                     <span className="card-title">{c.instructor.instructorName}</span>
                                     <p className="card-text"><strong> ₹{c.price}</strong></p>
-                                    <button className='btn btn-outline-secondary'
-                                     onClick={() => {
-                                      setCart([...cart,c])
-                                      localStorage.setItem('cart',JSON.stringify([...cart,c]))
-                                      toast.success('Item Added to Cart')
-                                      }}>
-                                      Add to Cart
-                                    </button>
                                 </div>
-                            </div>
-                        </Link>
-                    ))}
+                                
+                              </Link>
+                              {orders.map((o) => {
+                              let hasMatch = false;
+
+                              o.courses.forEach((C) => {
+                              if (C._id === c._id) {
+                                  hasMatch = true;   
+                              }
+                              });
+
+                              if (hasMatch) {
+                                return (
+                                  <div>
+                                  {o.status==="Unlocked" ? <button
+                                  key={o._id} // Add a unique key for each button
+                                  className="btn btn-warning"
+                                  onClick={() => {
+                                      navigate(`/dashboard/user/UnlockedCourses/${c.slug}`);
+                                  }}
+                                  >
+                                  Access The Contents
+                                  </button>:<button
+                                  key={o._id} // Add a unique key for each button
+                                  className="btn btn-warning"
+                                  onClick={() => {
+                                      deleteOrder(o._id)
+                                  }}
+                                  >
+                                  Cancel Order
+                                  </button>}
+                                  </div>
+                              );
+                              }
+
+                              return null; // Don't render any buttons for orders without a match
+                          })}
+
+                          {orders.every((o) => {
+                              return !o.courses.some((C) => C._id === c._id);
+                          }) && (
+                              <>
+                              {cart.filter((item) => item._id === c._id).length > 0 ? (
+                                  <button
+                                  className="btn btn-outline-secondary"
+                                  onClick={() => navigate("/cart")}
+                                  >
+                                  Go To Cart
+                                  </button>
+                              ) : (
+                                  <button
+                                  className="btn btn-outline-secondary"
+                                  onClick={() => {
+                                      setCart([...cart, c]);
+                                      localStorage.setItem("cart", JSON.stringify([...cart, c]));
+                                      toast.success("Item Added to Cart");
+                                      navigate("/cart");
+                                  }}
+                                  >
+                                  Add to Cart
+                                  </button>
+                              )}
+                              </>
+                          )}
+                              </div>
+                      ))}
           </div>
           {courses.length > 0?"": <div className="text-center mt-5">
               <h2 className='text-center'>No Courses Available for This Filter</h2>

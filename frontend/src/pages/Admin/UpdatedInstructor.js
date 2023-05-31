@@ -1,32 +1,32 @@
-import React,{useState,useEffect} from 'react'
-import AdminMenu from '../../components/Layout/AdminMenu'
-import Layout from '../../components/Layout/Layout'
-import axios from 'axios'
-import toast from 'react-hot-toast'
-import { useNavigate,useParams } from 'react-router-dom'
+import React,{useState,useEffect} from 'react';
+import AdminMenu from '../../components/Layout/AdminMenu';
+import Layout from '../../components/Layout/Layout';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { useNavigate,useParams } from 'react-router-dom';
 
 
 const UpdatedInstructor = () => {
-    const [photo,setPhoto]=useState("")
-    const [instructorName,setInstructorName]=useState("")
-    const [instructorDetails,setInstructorDetails]=useState("")
-    const [courses,setCourses]=useState(null)
-    const [id,setId]=useState('')
-    const navigate=useNavigate()
-    const params=useParams()
+    const [photo,setPhoto]=useState("");
+    const [instructorName,setInstructorName]=useState("");
+    const [instructorDetails,setInstructorDetails]=useState("");
+    const [courses,setCourses]=useState(null);
+    const [id,setId]=useState('');
+    const navigate=useNavigate();
+    const params=useParams();
   
     //Get Single Course
     const getSingleInstructor = async()=>{
         try {
-            const {data}= await axios(`/api/instructor/single-instructor/${params.slug}`)
-            setInstructorName(data.instructor.instructorName)
-            setInstructorDetails(data.instructor.instructorDetails)
-            setCourses(data.instructor.courses)
-            setId(data.instructor._id)
+            const {data}= await axios(`/api/instructor/single-instructor/${params.slug}`);
+            setInstructorName(data.instructor.instructorName);
+            setInstructorDetails(data.instructor.instructorDetails);
+            setCourses(data.instructor.courses);
+            setId(data.instructor._id);
             
         } catch (error) {
-            console.log(error)
-            toast.error(error.response.data.message)
+            console.log(error);
+            toast.error(error.response.data.message);
         }
     }
 
@@ -38,57 +38,57 @@ const UpdatedInstructor = () => {
     //Updating the Instructor
 
   const handleUpdate = async(e)=>{
-    e.preventDefault()
+    e.preventDefault();
     try {
-        const instructorData=new FormData()
-        instructorData.append("instructorName",instructorName)
-        instructorData.append("instructorDetails",instructorDetails)
-        photo && instructorData.append("photo",photo)
-        const {data}=await axios.patch(`/api/instructor/update-instructor/${id}`,instructorData)
+        const instructorData=new FormData();
+        instructorData.append("instructorName",instructorName);
+        instructorData.append("instructorDetails",instructorDetails);
+        photo && instructorData.append("photo",photo);
+        const {data}=await axios.patch(`/api/instructor/update-instructor/${id}`,instructorData);
   
         if(data?.success){
-          toast.success(`${instructorName} Course Updated`)
-          setInstructorName("")
-          setInstructorDetails("")
-          setCourses(null)
-          navigate('/dashboard/admin/create-instructor')
+          toast.success(`${instructorName} Course Updated`);
+          setInstructorName("");
+          setInstructorDetails("");
+          setCourses(null);
+          navigate('/dashboard/admin/create-instructor');
         }
         else{
-          toast.error(data.message)
+          toast.error(data.message);
         }
   
       } catch (error) {
-        console.log(error)
-        toast.error(error.response.data.message)
+        console.log(error);
+        toast.error(error.response.data.message);
       }
   }
 
   //Deleting the Instructor
   const handleDelete = async()=>{
-    let ans=window.prompt("Do You Want to Delete This Course?")
+    let ans=window.prompt("Do You Want to Delete This Course?");
     if(ans!=="yes")return;
     if(courses.length > 0 ){
-        toast.error(`Can't Delete the Instructor ${instructorName}`)
+        toast.error(`Can't Delete the Instructor ${instructorName}`);
         return;
     }
     try {
-      const {data}=await axios.delete(`/api/instructor/delete-instructor/${id}`)
+      const {data}=await axios.delete(`/api/instructor/delete-instructor/${id}`);
 
       if(data?.success){
-        toast.success(`${instructorName}'s details deleted `)
-        setInstructorDetails("")
-        setInstructorName("")
-        setCourses(null)
-        navigate('/dashboard/admin/create-instructor')
+        toast.success(`${instructorName}'s details deleted `);
+        setInstructorDetails("");
+        setInstructorName("");
+        setCourses(null);
+        navigate('/dashboard/admin/create-instructor');
       }
       else{
-        toast.error(data.message)
+        toast.error(data.message);
       }
     } catch (error) {
-      console.log(error.message)
-      toast.error(error.response.data.message)
+      console.log(error.message);
+      toast.error(error.response.data.message);
     }
-  }
+  };
 
   return (
     <div>
@@ -154,4 +154,4 @@ const UpdatedInstructor = () => {
   )
 }
 
-export default UpdatedInstructor
+export default UpdatedInstructor;
