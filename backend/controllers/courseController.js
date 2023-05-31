@@ -186,7 +186,7 @@ const deleteCourseController =async(req,res)=>{
     } catch (error) {
         console.log(error.message);
         res.status(500).send({
-            success:fasle,
+            success:false,
             message:'Error while Deleting Course',
             error:error.message
         })
@@ -454,7 +454,30 @@ const brainTreePaymentController = async (req, res) => {
     }
   };
 
+  const deleteOrderController = async (req, res) => {
+    try {
+      const orderId = req.params.id;
+      const deletedOrder = await orderModel.findByIdAndUpdate(orderId,
+        {
+            cancelled:1
+          },
+          { new: true });
+      
+      if (deletedOrder) {
+        console.log(deletedOrder)
+        res.json({ ok: true });
+      } else {
+        res.status(404).json({ error: "Order not found" });
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("Internal Server Error");
+    }
+  };
+  
+
 module.exports={createCourseController,getCourseController,
     getSingleCourseController,getPhotoController,
     deleteCourseController,updateCourseController,courseFilterController,
-courseCountController,courseListController,searchCourseController,relatedCourseController,braintreeTokenController,brainTreePaymentController};
+courseCountController,courseListController,searchCourseController,relatedCourseController,braintreeTokenController,brainTreePaymentController,
+deleteOrderController};

@@ -16,8 +16,12 @@ const orderModel = new mongoose.Schema(
     status: {
       type: String,
       default: "Not Process",
-      enum: ["Not Process", "Processing",  "cancel","nlocked"],
+      enum: ["Not Process", "Processing","Unlocked"],
     },
+    cancelled:{
+      type:Number,
+      default: 0
+    }
   },
   { timestamps: true }
 );

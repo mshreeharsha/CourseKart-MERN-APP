@@ -26,6 +26,23 @@ const HomePage = () => {
   const [auth]=useAuthContext()
   const [orders,setOrders]=useState([])
 
+
+  //Cancel Order
+  const deleteOrder= async(id)=>{
+    //Alert
+    let answer=window.prompt("Do You Want to Cancel The Order?");
+    if(answer!=="yes")return;
+    try {
+      const {data}=await axios.patch(`/api/course/cancel-order/${id}`)
+      if(data.ok){
+        toast.success('Order Cancelled Successfully!! Amount will be Refunded Soon!!')
+        navigate('/dashboard/user/orders')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  } 
+
   //Get Orders
   const getAllOrders = async()=>{
     try {
@@ -233,7 +250,7 @@ const HomePage = () => {
                                   key={o._id} // Add a unique key for each button
                                   className="btn btn-warning"
                                   onClick={() => {
-                                      
+                                      deleteOrder(o._id)
                                   }}
                                   >
                                   Cancel Order
