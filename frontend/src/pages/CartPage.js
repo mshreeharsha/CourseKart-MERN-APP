@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 
 const CartPage = () => {
     const [cart,setCart] = useCart([]);
-    const [auth,setAuth] = useAuthContext();
+    const [auth] = useAuthContext();
     const [clientToken, setClientToken] = useState("")
     const [instance, setInstance] = useState("");
     const [loading, setLoading] = useState(false);
@@ -22,7 +22,7 @@ const CartPage = () => {
     const totalPrice = () => {
         try {
             let total = 0;
-            cart?.map(item => {total = total + item.price})
+            cart?.map(item => (total = total + item.price))
             return total;
         } catch (error) {
             console.log(error);
