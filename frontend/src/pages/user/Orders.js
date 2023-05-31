@@ -31,11 +31,12 @@ const Orders = () => {
             <UserMenu />
           </div>
           <div className="col-md-9">
+          <div>
             <h1 className="text-center">All Orders</h1>
             {orders?.map((o, i) => {
               return (
                 <div className="border shadow">
-                  <table className="table">
+                  {o.cancelled!==1 && <table className="table">
                     <thead>
                       <tr>
                         <th scope="col">#</th>
@@ -54,9 +55,9 @@ const Orders = () => {
                         <td>{o?.payment.success ? "Success" : "Failed"}</td>
                       </tr>
                     </tbody>
-                  </table>
+                  </table>}
                   <div className="d-flex flex-row">
-                    {o?.courses?.map((c,i) => (
+                    {o.cancelled!==1 && o?.courses?.map((c,i) => (
                       <div className="card m-2" style={{width: '18rem'}} key={i}>
                       <Link key={c._id} to={`/course/${c.slug}`} className='course-link'>
                       <img src={`/api/course/course-photo/${c._id}`} className="card-img-top" alt={c.name} />
@@ -86,6 +87,50 @@ const Orders = () => {
                 </div>
               );
             })}
+          </div>
+          <div>
+            <h1 className="text-center">Cancelled Orders</h1>
+            {orders?.map((o, i) => {
+              return (
+                <div className="border shadow">
+                  {o?.cancelled===1 && <table className="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Buyer</th>
+                        <th scope="col"> date</th>
+                        <th scope="col">Payment</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{i + 1}</td>
+                        <td>{o?.status}</td>
+                        <td>{o?.buyer?.name}</td>
+                        <td>{moment(o?.createAt).fromNow()}</td>
+                        <td>{o?.payment.success ? "Success" : "Failed"}</td>
+                      </tr>
+                    </tbody>
+                  </table>}
+                  <div className="d-flex flex-row">
+                    {o?.cancelled===1 && o?.courses?.map((c,i) => (
+                      <div className="card m-2" style={{width: '18rem'}} key={i}>
+                      <Link key={c._id} to={`/course/${c.slug}`} className='course-link'>
+                      <img src={`/api/course/course-photo/${c._id}`} className="card-img-top" alt={c.name} />
+                      <div className="card-body">
+                          <h5 className="card-title">{c.name}</h5>
+                          <span className="card-title">{c.instructor.instructorName}</span>
+                          <p className="card-text"><strong> ₹{c.price}</strong></p>
+                      </div>
+                    </Link>
+                    </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
           </div>
         </div>
       </div>

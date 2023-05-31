@@ -20,7 +20,7 @@ const {createCourseController,
     searchCourseController,
     relatedCourseController,
     brainTreePaymentController,
-    braintreeTokenController} = require('../controllers/courseController');
+    braintreeTokenController,deleteOrderController} = require('../controllers/courseController');
 
 //creating a new Course
 
@@ -62,5 +62,8 @@ router.get("/braintree/token", braintreeTokenController);
 
 //payments
 router.post("/braintree/payment", requireSignIn, brainTreePaymentController);
+
+//cancel Order
+router.patch("/cancel-order/:id",requireSignIn,deleteOrderController);
 
 module.exports=router;
