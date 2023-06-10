@@ -424,6 +424,7 @@ const braintreeTokenController = async (req, res) => {
 const brainTreePaymentController = async (req, res) => {
     try {
       const { nonce, cart } = req.body;
+      console.log("h1",cart)
       let total = 0;
       cart.map((i) => {
         total += i.price;

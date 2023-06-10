@@ -8,6 +8,7 @@ const userRoute = require('./routes/userRoute')
 const categoryRoute = require('./routes/categoryRoutes')
 const courseRoute = require('./routes/courseRoute')
 const instructorRoute = require('./routes/instructorRoute')
+const bodyParser = require('body-parser');
 
 //Morgan
 const morgan = require('morgan')
@@ -22,6 +23,8 @@ app.use('/api/users',userRoute)
 app.use('/api/category',categoryRoute)
 app.use('/api/course',courseRoute)
 app.use('/api/instructor',instructorRoute)
+
+app.use(bodyParser.json({ limit: '10mb' }));
 
 //Connect to Database
 connectDB()

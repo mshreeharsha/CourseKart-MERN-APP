@@ -56,16 +56,20 @@ const Orders = () => {
                       </tr>
                     </tbody>
                   </table>}
-                  <div className="d-flex flex-row">
+                  <div className="d-flex flex-row flex-wrap">
                     {o.cancelled!==1 && o?.courses?.map((c,i) => (
-                      <div className="card m-2" style={{width: '18rem'}} key={i}>
+                      <div className="card m-2" style={{width: '25rem'}} key={i}>
                       <Link key={c._id} to={`/course/${c.slug}`} className='course-link'>
-                      <img src={`/api/course/course-photo/${c._id}`} className="card-img-top" alt={c.name} />
-                      <div className="card-body">
+                        <div className="d-flex">
+                        <div className="col-md-6">
+                          <img src={`/api/course/course-photo/${c._id}`} className="card-img-top" alt={c.name} />
+                        </div>
+                        <div className="col-md-6 card-body">
                           <h5 className="card-title">{c.name}</h5>
                           <span className="card-title">{c.instructor.instructorName}</span>
                           <p className="card-text"><strong> ₹{c.price}</strong></p>
-                      </div>
+                        </div>
+                        </div>
                     </Link>
                       {o.status === "Unlocked"?(<div className="border border-info-subtle border-4 p-2 mb-2" style={{maxHeight:'30vh'}}>
                         <p>The Course Is <strong>Unlocked Now</strong></p>
@@ -74,10 +78,7 @@ const Orders = () => {
                         onClick={()=>{
                           navigate(`/dashboard/user/UnlockedCourses/${c.slug}`)
                         }}>Access the Contents</button>
-                      </div>):o.status === "cancel"?(<div className="border border-info-subtle border-4 p-2 mb-2" style={{maxHeight:'30vh'}}>
-                      <p>The Course Is <strong>Cancelled due to some Reasons</strong></p>
-                      <p>Amount will be Refunded Back Soon</p>
-                    </div>):(<div className="border border-info-subtle border-4 p-2 mb-2" style={{maxHeight:'30vh'}}>
+                      </div>):(<div className="border border-info-subtle border-4 p-2 mb-2" style={{maxHeight:'30vh'}}>
                         <p>The Course Is <strong>Not Yet Unlocked</strong></p>
                         <p>It will be Accessible in Few Days</p>
                       </div>)}
@@ -113,16 +114,20 @@ const Orders = () => {
                       </tr>
                     </tbody>
                   </table>}
-                  <div className="d-flex flex-row">
+                  <div className="d-flex flex-row flex-wrap">
                     {o?.cancelled===1 && o?.courses?.map((c,i) => (
-                      <div className="card m-2" style={{width: '18rem'}} key={i}>
+                      <div className="card m-2" style={{width: '25rem'}} key={i}>
                       <Link key={c._id} to={`/course/${c.slug}`} className='course-link'>
-                      <img src={`/api/course/course-photo/${c._id}`} className="card-img-top" alt={c.name} />
-                      <div className="card-body">
+                        <div className="d-flex">
+                        <div className="col-md-6">
+                          <img src={`/api/course/course-photo/${c._id}`} className="card-img-top" alt={c.name} />
+                        </div>
+                        <div className="col-md-6 card-body">
                           <h5 className="card-title">{c.name}</h5>
                           <span className="card-title">{c.instructor.instructorName}</span>
                           <p className="card-text"><strong> ₹{c.price}</strong></p>
-                      </div>
+                        </div>
+                        </div>
                     </Link>
                     </div>
                     ))}

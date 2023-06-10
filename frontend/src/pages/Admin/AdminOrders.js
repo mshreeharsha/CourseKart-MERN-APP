@@ -51,7 +51,7 @@ const AdminOrders = () => {
           <AdminMenu />
         </div>
         <div className="col-md-9">
-        <div className="col-md-9">
+        <div className="col-md-11">
           <h1 className="text-center">All Orders</h1>
           {orders?.map((o, i) => {
             return (
@@ -89,21 +89,24 @@ const AdminOrders = () => {
                     </tr>
                   </tbody>
                 </table>}
-                <div className="container d-flex flex-row">
+                <div className="d-flex flex-row flex-wrap">
                   {o.cancelled!==1 && o?.courses?.map((c) => (
-                    
-                      <div className="card m-2" style={{width: '18rem'}} key={c._id} 
+                      <div className="card m-2" style={{width: '25rem'}} key={i}
                       onClick={()=>{
                         navigate(`/dashboard/admin/courses/${c.slug}`)
                       }}>
-                               
-                                <img src={`/api/course/course-photo/${c._id}`} className="card-img-top" alt={c.name} />
-                                <div className="card-body">
-                                    <h5 className="card-title">{c.name}</h5>
-                                    <span className="card-title">{c.instructor.instructorName}</span>
-                                    <p className="card-text"><strong> ₹{c.price}</strong></p>
-                                </div>
-                      </div>
+                      
+                        <div className="d-flex">
+                        <div className="col-md-6">
+                          <img src={`/api/course/course-photo/${c._id}`} className="card-img-top" alt={c.name} />
+                        </div>
+                        <div className="col-md-6 card-body">
+                          <h5 className="card-title">{c.name}</h5>
+                          <span className="card-title">{c.instructor.instructorName}</span>
+                          <p className="card-text"><strong> ₹{c.price}</strong></p>
+                        </div>
+                        </div>
+                        </div>
                   ))}
                 </div>
               </div>
@@ -148,20 +151,24 @@ const AdminOrders = () => {
                     </tr>
                   </tbody>
                 </table>}
-                <div className="container d-flex flex-row">
+                <div className="d-flex flex-row flex-wrap">
                   {o.cancelled===1 && o?.courses?.map((c) => (
                     
-                      <div className="card m-2" style={{width: '18rem'}} key={c._id} 
-                      onClick={()=>{
-                        navigate(`/dashboard/admin/courses/${c.slug}`)
-                      }}>
-                               
-                                <img src={`/api/course/course-photo/${c._id}`} className="card-img-top" alt={c.name} />
-                                <div className="card-body">
-                                    <h5 className="card-title">{c.name}</h5>
-                                    <span className="card-title">{c.instructor.instructorName}</span>
-                                    <p className="card-text"><strong> ₹{c.price}</strong></p>
-                                </div>
+                    <div className="card m-2" style={{width: '25rem'}} key={i}
+                    onClick={()=>{
+                      navigate(`/dashboard/admin/courses/${c.slug}`)
+                    }}>
+                    
+                      <div className="d-flex">
+                      <div className="col-md-6">
+                        <img src={`/api/course/course-photo/${c._id}`} className="card-img-top" alt={c.name} />
+                      </div>
+                      <div className="col-md-6 card-body">
+                        <h5 className="card-title">{c.name}</h5>
+                        <span className="card-title">{c.instructor.instructorName}</span>
+                        <p className="card-text"><strong> ₹{c.price}</strong></p>
+                      </div>
+                      </div>
                       </div>
                   ))}
                 </div>

@@ -180,9 +180,7 @@ const HomePage = () => {
       toast.error(error.response.data.message)
     }
   }
-
-  
-
+  console.log("hi",cart)
   return (
     <Layout title="Online Courses - CourseKart (Skill++)">
       <div className="row mt-3">
@@ -280,8 +278,9 @@ const HomePage = () => {
                                   <button
                                   className="btn btn-outline-secondary"
                                   onClick={() => {
-                                      setCart([...cart, c]);
-                                      localStorage.setItem("cart", JSON.stringify([...cart, c]));
+                                      let cInfo={_id:c._id,price:c.price,slug:c.slug}
+                                      setCart([...cart, cInfo]);
+                                      localStorage.setItem("cart", JSON.stringify([...cart, cInfo]));
                                       toast.success("Item Added to Cart");
                                       navigate("/cart");
                                   }}

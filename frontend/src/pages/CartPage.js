@@ -10,13 +10,27 @@ import toast from "react-hot-toast";
 
 const CartPage = () => {
     const [cart,setCart] = useCart([]);
+    const [courses,setCourses] = useState([]);
     const [auth] = useAuthContext();
     const [clientToken, setClientToken] = useState("")
     const [instance, setInstance] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate  = useNavigate();
 
+    const getCoursesInCart = async()=>{
+      const list=[]
+      for(let i=0;i<cart.length;i++){
+        let s=cart[i].slug
+        let {data}=await axios.get(`/api/course/get-course/${s}`)
+        list.push(data.course)
+      }
+      setCourses(list)
+    }
 
+    useEffect(()=>{
+      getCoursesInCart()
+      // eslint-disable-next-line
+    },[cart])
 
     // sum of prices
     const totalPrice = () => {
@@ -84,7 +98,6 @@ const CartPage = () => {
       setLoading(false);
     }
   };
-
     return (
     <Layout>
         <div className='container'>
@@ -103,9 +116,8 @@ const CartPage = () => {
             <div className='row'>
                 <div className='col-md-9'>
                     <div className="d-flex flex-wrap">
-                        {cart?.map((c) => (
-
-                                <div className="card m-2" style={{width: '18rem'}} key={c._id}>
+                        {courses?.map((c) => (
+                            <div className="card m-2" style={{width: '18rem'}} key={c._id}>
                                 <Link key={c._id} to={`/course/${c.slug}`} className='course-link'>
                                 <img src={`/api/course/course-photo/${c._id}`} className="card-img-top" alt={c.name} />
                                 <div className="card-body">
