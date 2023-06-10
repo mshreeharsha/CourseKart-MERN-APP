@@ -44,6 +44,7 @@ const AdminOrders = () => {
     }
   };
   console.log(orders)
+  console.log(orders)
   return (
     <Layout title={"All Orders Information"}>
       <div className="row dashboard">

@@ -19,8 +19,10 @@ const orderModel = new mongoose.Schema(
       enum: ["Not Process", "Processing","Unlocked"],
     },
     cancelled:{
-      type:Number,
-      default: 0
+      type: [Number],
+      default: function () {
+        return new Array(this.courses.length).fill(0);
+      }
     }
   },
   { timestamps: true }

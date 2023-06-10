@@ -424,7 +424,6 @@ const braintreeTokenController = async (req, res) => {
 const brainTreePaymentController = async (req, res) => {
     try {
       const { nonce, cart } = req.body;
-      console.log("h1",cart)
       let total = 0;
       cart.map((i) => {
         total += i.price;
@@ -458,10 +457,10 @@ const brainTreePaymentController = async (req, res) => {
   const deleteOrderController = async (req, res) => {
     try {
       const orderId = req.params.id;
+      const index = req.query.param1;
       const deletedOrder = await orderModel.findByIdAndUpdate(orderId,
-        {
-            cancelled:1
-          },
+        
+            { $set: { [`cancelled.${index}`]: 1 } },
           { new: true });
       
       if (deletedOrder) {

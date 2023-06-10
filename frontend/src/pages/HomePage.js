@@ -28,12 +28,12 @@ const HomePage = () => {
 
 
   //Cancel Order
-  const deleteOrder= async(id)=>{
+  const deleteOrder= async(id,index)=>{
     //Alert
     let answer=window.prompt("Do You Want to Cancel The Order?");
     if(answer!=="yes")return;
     try {
-      const {data}=await axios.patch(`/api/course/cancel-order/${id}`)
+      const {data}=await axios.patch(`/api/course/cancel-order/${id}?param1=${index}`)
       if(data.ok){
         toast.success('Order Cancelled Successfully!! Amount will be Refunded Soon!!')
         window.location.reload();
@@ -180,7 +180,7 @@ const HomePage = () => {
       toast.error(error.response.data.message)
     }
   }
-  console.log("hi",cart)
+  console.log("hi",orders)
   return (
     <Layout title="Online Courses - CourseKart (Skill++)">
       <div className="row mt-3">
@@ -226,11 +226,13 @@ const HomePage = () => {
                               </Link>
                               {orders.map((o) => {
                               let hasMatch = false;
+                              let i=0;
 
-                              o.courses.forEach((C) => {
+                              o.courses.forEach((C,index) => {
                               if (C._id === c._id) {
-                                if(o.cancelled!==1){
+                                if(o.cancelled[index]!==1){
                                   hasMatch = true;   
+                                  i=index;
                                 }
                                  
                               }
@@ -239,7 +241,7 @@ const HomePage = () => {
                               if (hasMatch) {
                                 return (
                                   <div>
-                                  {o.cancelled!==1 && o.status==="Unlocked" ? <button
+                                  {o.cancelled[i]!==1 && o.status==="Unlocked" ? <button
                                   key={o._id} // Add a unique key for each button
                                   className="btn btn-warning"
                                   onClick={() => {
@@ -251,7 +253,7 @@ const HomePage = () => {
                                   key={o._id} // Add a unique key for each button
                                   className="btn btn-warning"
                                   onClick={() => {
-                                      deleteOrder(o._id)
+                                      deleteOrder(o._id,i)
                                   }}
                                   >
                                   Cancel Order
@@ -264,7 +266,7 @@ const HomePage = () => {
                           })}
 
                           {orders.every((o) => {
-                              return !o.courses.some((C) => C._id === c._id) || o.cancelled===1;
+                              return !o.courses.some((C,index) => C._id === c._id && o.cancelled[index]!==1);
                           }) && (
                               <>
                               {cart.filter((item) => item._id === c._id).length > 0 ? (
