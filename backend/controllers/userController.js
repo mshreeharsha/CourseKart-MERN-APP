@@ -133,8 +133,7 @@ const updateProfileController = async(req,res)=>{
     }
 };
 
-//Get All Users
-
+//Controller to Fecth all users form database
 const getAllUsersController = async(req,res)=>{
     try {
         const users= await userModel.find({role:0})

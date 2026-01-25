@@ -57,7 +57,7 @@ const AdminOrders = () => {
           {orders?.map((o, i) => {
             return (
               <div className="border shadow">
-                {o.cancelled!==1 && <table className="table">
+                {o.courses.some((C,index)=>o.cancelled[index]!==1) && <table className="table">
                   <thead>
                     <tr>
                       <th scope="col">#</th>
@@ -91,7 +91,7 @@ const AdminOrders = () => {
                   </tbody>
                 </table>}
                 <div className="d-flex flex-row flex-wrap">
-                  {o.cancelled!==1 && o?.courses?.map((c) => (
+                  {o?.courses?.map((c,index) => o.cancelled[index]!==1 &&  (
                       <div className="card m-2" style={{width: '25rem'}} key={i}
                       onClick={()=>{
                         navigate(`/dashboard/admin/courses/${c.slug}`)
@@ -119,7 +119,7 @@ const AdminOrders = () => {
           {orders?.map((o, i) => {
             return (
               <div className="border shadow">
-                {o.cancelled===1 && <table className="table">
+                {o.courses.some((C,index)=>o.cancelled[index]===1)  && <table className="table">
                   <thead>
                     <tr>
                       <th scope="col">#</th>
@@ -153,7 +153,7 @@ const AdminOrders = () => {
                   </tbody>
                 </table>}
                 <div className="d-flex flex-row flex-wrap">
-                  {o.cancelled===1 && o?.courses?.map((c) => (
+                  {o?.courses?.map((c,index) => o.cancelled[index]===1 &&(
                     
                     <div className="card m-2" style={{width: '25rem'}} key={i}
                     onClick={()=>{

@@ -99,7 +99,6 @@ const HomePage = () => {
       }
     } catch (error) {
       console.log(error)
-
     }
   }
 
@@ -168,11 +167,11 @@ const HomePage = () => {
       const {data} = await axios.post('/api/course/course-filter',{checked,radio})
 
       if(data?.success){
-        console.log(data.courses)
-        setCourses(data.courses)
+        console.log(data.courses)                      
+        setCourses(data.courses)   
         setTotal(data.courses.length)//added
       }
-      else{
+      else{                   
         toast.error(data.message)
       }
     } catch (error) {

@@ -64,7 +64,6 @@ const createCourseController = async(req,res)=>{
                 return res.status(500).send({
                     message:'Photo is Required and should be less than 1MB'
                 })
-             
         }
 
         const existing=await courseModel.findOne({name});

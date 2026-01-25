@@ -3,6 +3,7 @@ import Layout from "./../../components/Layout/Layout";
 import {toast} from 'react-hot-toast';
 import '../../styles/Register.css';
 import { useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import axios from 'axios';
 
@@ -10,10 +11,14 @@ const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
-  const navigate = useNavigate();
 
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [confirmPasswordError, setConfirmPasswordError] = useState("")
+  const navigate = useNavigate();
 
   // form function
   const handleSubmit = async (e) => {
@@ -64,9 +69,9 @@ const Register = () => {
               required
             />
           </div>
-          <div className="mb-3">
+          <div className="mb-3 passwordBlock">
             <input
-              type="password"
+              type={showPassword ? "text":"password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="form-control"
@@ -74,6 +79,45 @@ const Register = () => {
               placeholder="Enter Your Password"
               required
             />
+            <button
+              type="button"
+              className="btn"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FaEyeSlash/> : <FaEye/>}
+            </button>
+          </div>
+          <div className="mb-3">
+            <div className="passwordBlock">
+              <input
+                type={showConfirmPassword ? "text":"password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="form-control"
+                id="exampleInputRePassword1"
+                placeholder="Re-enter Your Password"
+                required
+                onBlur={() => {
+                  if (confirmPassword && confirmPassword !== password) {
+                    setConfirmPasswordError("Passwords do not match");
+                  } else {
+                    setConfirmPasswordError("");
+                  }
+                }}
+              />
+              <button
+                type="button"
+                className="btn"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                {showPassword ? <FaEyeSlash/> : <FaEye/>}
+              </button>
+            </div>
+              {confirmPasswordError && (
+                <div className="text-danger mt-1">
+                  {confirmPasswordError}
+                </div>
+              )}
           </div>
           <div className="mb-3">
             <input

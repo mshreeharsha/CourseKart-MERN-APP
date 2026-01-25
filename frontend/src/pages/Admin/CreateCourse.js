@@ -82,7 +82,7 @@ const CreateCourse = () => {
       if(data?.success){
         toast.success(`${name} Course Added`);
         setName("");
-        setDescription("");
+        setDescription("")
         setCategory("");
         setInstructor("");
         setAccessible("");

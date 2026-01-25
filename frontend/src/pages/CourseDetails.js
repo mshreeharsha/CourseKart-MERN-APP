@@ -188,17 +188,7 @@ const CourseDetails = () => {
             <div className="col-mt-3 border border-warning border-2 p-2 mb-2"
             style={{maxWidth:'50%'}}>
                 <h2>Course Content</h2>
-                <div>
-                    {
-                        course.topics && (
-                            <ul>
-                                {course && course.topics.split('|').map((topic, index) => (
-                                    <li key={index}>{topic}</li>
-                                ))}
-                            </ul>
-                        )
-                    }
-                </div>
+                c
             </div>
         </div>
         <div className="container" style={{marginTop:'50px',maxWidth:'70%'}}>

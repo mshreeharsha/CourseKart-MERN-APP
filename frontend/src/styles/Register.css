@@ -34,14 +34,14 @@
     border: none;
     border-bottom: 1px solid #ccc;
     border-radius: 0;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     padding: 10px;
     font-size: 16px;
     width: 100%;
     box-sizing: border-box;
 }
 
-.form-container form button {
+.form-container form button[type="submit"]{
     border: none;
     border-radius: 5px;
     background-color: #5a5a5a;
@@ -54,7 +54,19 @@
     transition: all 0.3s ease-in-out;
 }
 
-.form-container form button:hover {
+.form-container form button[type="submit"]:hover {
     background-color: #333;
 }
 
+.passwordBlock{
+    display: flex;
+    align-items: top;
+    justify-content: center;
+}
+
+
+.passwordBlock button {
+  cursor: pointer;
+  flex:1;
+  margin-bottom: 20px;
+}
